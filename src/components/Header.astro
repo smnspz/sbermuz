@@ -1,0 +1,58 @@
+---
+import Logo from './Logo.astro';
+---
+
+<header class="flex items-center justify-between px-6 py-4">
+	<a href="/">
+		<Logo />
+	</a>
+
+	<!-- TODO: Links will be dynamically fetched by cms? -->
+
+	<!-- Desktop nav -->
+	<nav class="hidden md:flex gap-6">
+		<a href="/galleria" class="hover:underline underline-offset-4">galleria</a>
+		<a href="/calendario" class="hover:underline underline-offset-4">calendario</a>
+		<a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="hover:underline underline-offset-4">instagram</a>
+		<a href="https://bandcamp.com" target="_blank" rel="noopener noreferrer" class="hover:underline underline-offset-4">bandcamp</a>
+	</nav>
+
+	<!-- Mobile hamburger button -->
+	<button id="menu-open" class="md:hidden" aria-label="Open menu">
+		<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<line x1="3" y1="6" x2="21" y2="6" />
+			<line x1="3" y1="12" x2="21" y2="12" />
+			<line x1="3" y1="18" x2="21" y2="18" />
+		</svg>
+	</button>
+</header>
+
+<!-- Mobile overlay menu -->
+<div id="mobile-menu" class="fixed inset-0 bg-white z-50 flex-col items-center justify-center gap-8 text-2xl hidden">
+	<button id="menu-close" class="absolute top-4 right-6" aria-label="Close menu">
+		<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<line x1="18" y1="6" x2="6" y2="18" />
+			<line x1="6" y1="6" x2="18" y2="18" />
+		</svg>
+	</button>
+	<a href="/galleria" class="hover:underline underline-offset-4">galleria</a>
+	<a href="/calendario" class="hover:underline underline-offset-4">calendario</a>
+	<a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="hover:underline underline-offset-4">instagram</a>
+	<a href="https://bandcamp.com" target="_blank" rel="noopener noreferrer" class="hover:underline underline-offset-4">bandcamp</a>
+</div>
+
+<script>
+	const openBtn = document.getElementById('menu-open');
+	const closeBtn = document.getElementById('menu-close');
+	const menu = document.getElementById('mobile-menu');
+
+	openBtn?.addEventListener('click', () => {
+		menu?.classList.remove('hidden');
+		menu?.classList.add('flex');
+	});
+
+	closeBtn?.addEventListener('click', () => {
+		menu?.classList.remove('flex');
+		menu?.classList.add('hidden');
+	});
+</script>
