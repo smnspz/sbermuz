@@ -1,9 +1,10 @@
 ---
-import { Header, EventCarousel, Lightbox } from '../components';
+import { Header, Hero, EventCarousel, Footer, Lightbox } from '../components';
 import { getEvents } from '../lib/events';
+import { getHero } from '../lib/hero';
 import '../styles/global.css';
 
-const events = getEvents();
+const [hero, events] = await Promise.all([getHero(), getEvents()]);
 ---
 
 <html lang="en">
@@ -11,15 +12,21 @@ const events = getEvents();
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Sbermuz</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&family=Unbounded:wght@400;700&display=swap" rel="stylesheet" />
+		<title>Collettivo Sbermuz</title>
 	</head>
 	<body class="bg-bg">
 		<Header />
 		<main>
+			<Hero title={hero.title} description={hero.description} image={hero.image} date={hero.date} ctaText={hero.ctaText} ctaUrl={hero.ctaUrl} />
+			<div id="gallery"></div>
 			{events.map((event) => (
-				<EventCarousel title={event.title} date={event.date} description={event.description} ctaText={event.ctaText} ctaUrl={event.ctaUrl} flyer={event.flyer} photos={event.photos} />
+				<EventCarousel title={event.title} date={event.date} rawDate={event.rawDate} flyer={event.flyer} photos={event.photos} />
 			))}
 		</main>
+		<Footer />
 		<Lightbox />
 	</body>
 </html>
