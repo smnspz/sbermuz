@@ -1,0 +1,86 @@
+---
+import { EventPhoto } from '../atoms';
+import { PhotoColumn } from '../molecules';
+import { getPhotoDate } from '../../lib/events';
+
+interface Props {
+  title: string;
+  date: string;
+  description?: string;
+  ctaText?: string;
+  ctaUrl?: string;
+  flyer: string;
+  photos?: string[];
+}
+
+const { title, date, description, ctaText, ctaUrl, flyer, photos } = Astro.props;
+
+const leftPhotos: string[] = [];
+const rightPhotos: string[] = [];
+
+if (photos) {
+  photos.forEach((p, i) => {
+    if (i % 2 === 0) leftPhotos.push(p);
+    else rightPhotos.push(p);
+  });
+}
+
+const hasPhotos = photos && photos.length > 0;
+const photoDate = hasPhotos ? getPhotoDate(photos[0]) : '';
+---
+
+{hasPhotos && (
+  <div class="py-28 px-6 text-center">
+    <h2 class="text-3xl font-bold">{title}</h2>
+    <p class="text-sm opacity-60 mt-1">{date}</p>
+  </div>
+)}
+
+{hasPhotos ? (
+  <section class="grid grid-cols-1 md:grid-cols-[1fr_1.2fr_1fr] gap-12 px-6 pb-12 max-w-6xl mx-auto">
+    <PhotoColumn photos={leftPhotos} date={photoDate} class="hidden md:flex flex-col gap-40" />
+
+    <div class="md:sticky md:top-24 md:self-start">
+      <img src={flyer} alt="" class="w-full block rounded-lg" />
+    </div>
+
+    <PhotoColumn photos={rightPhotos} date={photoDate} class="hidden md:flex flex-col gap-40 mt-12" />
+
+    <!-- Mobile: photos below flyer -->
+    <PhotoColumn photos={photos!} date={photoDate} class="flex flex-col gap-8 md:hidden" />
+  </section>
+) : (
+  <section class="min-h-[calc(100vh-5rem)] relative grid grid-cols-1 md:grid-cols-2 gap-12 px-6 pb-20 max-w-5xl mx-auto items-center">
+    <div class="flex justify-center">
+      <img src={flyer} alt="" class="w-full max-w-sm block rounded-lg" />
+    </div>
+    <div class="flex flex-col gap-4">
+      <h2 class="text-3xl font-bold">{title}</h2>
+      <p class="text-sm opacity-60">{date}</p>
+      {description && (
+        <p class="text-base leading-relaxed mt-2">{description}</p>
+      )}
+      {ctaText && ctaUrl && (
+        <a href={ctaUrl} target="_blank" rel="noopener noreferrer" class="inline-block font-bold underline underline-offset-4 hover:opacity-70 transition">
+          {ctaText}
+        </a>
+      )}
+    </div>
+    <div id="scroll-hint" class="absolute bottom-14 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-50 transition-opacity duration-300">
+      <p class="text-xs">scrolla per le foto degli eventi</p>
+      <svg class="w-5 h-5 animate-bounce" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9" />
+      </svg>
+    </div>
+  </section>
+)}
+
+<script>
+  const hint = document.getElementById('scroll-hint');
+  if (hint) {
+    window.addEventListener('scroll', () => {
+      const opacity = Math.max(0, 0.5 - window.scrollY / 800);
+      hint.style.opacity = String(opacity);
+    });
+  }
+</script>

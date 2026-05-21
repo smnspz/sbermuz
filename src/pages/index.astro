@@ -1,6 +1,9 @@
 ---
-import Header from '../components/Header.astro';
+import { Header, EventCarousel, Lightbox } from '../components';
+import { getEvents } from '../lib/events';
 import '../styles/global.css';
+
+const events = getEvents();
 ---
 
 <html lang="en">
@@ -10,9 +13,13 @@ import '../styles/global.css';
 		<meta name="generator" content={Astro.generator} />
 		<title>Sbermuz</title>
 	</head>
-	<body>
+	<body class="bg-bg">
 		<Header />
 		<main>
+			{events.map((event) => (
+				<EventCarousel title={event.title} date={event.date} description={event.description} ctaText={event.ctaText} ctaUrl={event.ctaUrl} flyer={event.flyer} photos={event.photos} />
+			))}
 		</main>
+		<Lightbox />
 	</body>
 </html>
