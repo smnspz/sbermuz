@@ -1,0 +1,67 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  image: string;
+  date: string;
+  ctaText?: string;
+  ctaUrl?: string;
+}
+
+const { title, description, image, date, ctaText, ctaUrl } = Astro.props;
+---
+
+<section class="min-h-[calc(100vh-var(--header-bottom,5rem))] md:h-[calc(100vh-var(--header-bottom,5rem))] flex flex-col px-6 pb-16 md:pb-0 max-w-6xl mx-auto">
+  <div class="flex-1 flex items-center">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center w-full">
+      <div class="flex justify-center hero-fade" style="--delay: 0ms">
+        <img src={image} alt="" class="w-full max-w-md block rounded-lg" />
+      </div>
+      <div class="flex flex-col gap-5">
+        <h2 class="text-5xl font-bold font-display hero-fade" style="--delay: 80ms">{title}</h2>
+        <p class="text-base opacity-60 hero-fade" style="--delay: 160ms">{date}</p>
+        <p class="text-lg leading-relaxed mt-2 hero-fade" style="--delay: 240ms">{description}</p>
+        {ctaText && ctaUrl && (
+          <a href={ctaUrl} target="_blank" rel="noopener noreferrer" class="inline-block mt-4 px-8 py-4 text-lg font-bold uppercase bg-bg border-2 border-black shadow-[4px_4px_0_0_black] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all hero-fade" style="--delay: 320ms">
+            {ctaText}
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+  <a href="#gallery" id="scroll-hint" class="hidden md:flex flex-col items-center gap-4 pb-10 hover:opacity-80 transition-opacity duration-300 cursor-pointer no-underline shrink-0 hero-fade" style="--delay: 400ms; --end-opacity: 0.5">
+    <p class="text-sm">scrolla per le foto degli eventi</p>
+    <svg class="w-7 h-7 animate-bounce" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  </a>
+</section>
+
+<style>
+  @keyframes hero-drop {
+    from {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+    to {
+      opacity: var(--end-opacity, 1);
+      transform: translateY(0);
+    }
+  }
+
+  .hero-fade {
+    opacity: 0;
+    animation: hero-drop 0.4s ease-out forwards;
+    animation-delay: var(--delay, 0ms);
+  }
+</style>
+
+<script>
+  const hint = document.getElementById('scroll-hint');
+  if (hint) {
+    window.addEventListener('scroll', () => {
+      const opacity = Math.max(0, 0.5 - window.scrollY / 800);
+      hint.style.opacity = String(opacity);
+    });
+  }
+</script>
