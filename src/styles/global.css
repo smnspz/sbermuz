@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Comic Sans MS", "Comic Sans", cursive;
+  --font-sans: "Source Code Pro", monospace;
+  --font-display: "Unbounded", sans-serif;
+  --color-bg: #e8e6e1;
+}
+
+html {
+  font-size: 14px;
+  scroll-behavior: smooth;
 }
