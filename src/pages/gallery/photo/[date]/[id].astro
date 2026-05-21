@@ -1,17 +1,18 @@
 ---
-import { getEvents, getPhotoId, getPhotoDate } from '../../../../lib/events';
+import { getEvents, getPhotoDate } from '../../../../lib/events';
 import '../../../../styles/global.css';
 
-export function getStaticPaths() {
-  const events = getEvents();
+export async function getStaticPaths() {
+  const events = await getEvents();
   const paths: { params: { date: string; id: string }; props: { src: string; allPhotos: { src: string; date: string; id: string }[] } }[] = [];
 
   for (const event of events) {
     if (!event.photos) continue;
-    const eventPhotos = event.photos.map((p) => ({
+    const photoDate = getPhotoDate(event.rawDate);
+    const eventPhotos = event.photos.map((p, i) => ({
       src: p,
-      date: getPhotoDate(p),
-      id: getPhotoId(p),
+      date: photoDate,
+      id: String(i + 1),
     }));
     for (const photo of eventPhotos) {
       paths.push({
@@ -36,29 +37,48 @@ const next = currentIndex < allPhotos.length - 1 ? allPhotos[currentIndex + 1] :
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&family=Unbounded:wght@400;700&display=swap" rel="stylesheet" />
     <title>Photo {id} - Sbermuz</title>
   </head>
-  <body class="bg-black m-0 h-full flex flex-col overflow-hidden">
+  <body class="bg-black m-0 h-dvh flex flex-col overflow-hidden">
     <!-- Top bar -->
     <div class="flex items-center justify-center md:justify-between px-4 py-3 shrink-0">
       <a href="/" class="text-white/70 hover:text-white text-sm">&larr; torna al sito</a>
       <span class="text-white/50 text-sm hidden md:inline">{currentIndex + 1} / {allPhotos.length}</span>
     </div>
 
-    <!-- Navigation + Image -->
-    <div class="flex-1 flex items-center justify-center gap-4 px-4 pb-6 min-h-0 overflow-hidden">
+    <!-- Image -->
+    <div class="flex-1 flex items-center justify-center px-4 md:px-12 md:gap-8 min-h-0 overflow-hidden">
+      {/* Desktop side arrows */}
       {prev ? (
-        <a href={`/gallery/photo/${prev.date}/${prev.id}`} class="text-white/50 hover:text-white text-4xl shrink-0">&lsaquo;</a>
+        <a href={`/gallery/photo/${prev.date}/${prev.id}`} class="hidden md:block text-white/50 hover:text-white text-4xl shrink-0">&lsaquo;</a>
       ) : (
-        <span class="text-4xl invisible shrink-0">&lsaquo;</span>
+        <span class="hidden md:block text-4xl invisible shrink-0">&lsaquo;</span>
       )}
 
-      <img src={src} alt="" class="max-h-[calc(100dvh-4rem)] max-w-full object-contain" />
+      <img src={src} alt="" class="max-h-[calc(100dvh-7rem)] md:max-h-[calc(100dvh-4rem)] max-w-full object-contain" />
 
       {next ? (
-        <a href={`/gallery/photo/${next.date}/${next.id}`} class="text-white/50 hover:text-white text-4xl shrink-0">&rsaquo;</a>
+        <a href={`/gallery/photo/${next.date}/${next.id}`} class="hidden md:block text-white/50 hover:text-white text-4xl shrink-0">&rsaquo;</a>
       ) : (
-        <span class="text-4xl invisible shrink-0">&rsaquo;</span>
+        <span class="hidden md:block text-4xl invisible shrink-0">&rsaquo;</span>
+      )}
+    </div>
+
+    <!-- Mobile bottom nav -->
+    <div class="flex md:hidden items-center justify-between px-6 py-3 shrink-0">
+      {prev ? (
+        <a href={`/gallery/photo/${prev.date}/${prev.id}`} class="text-white/50 hover:text-white text-2xl">&lsaquo;</a>
+      ) : (
+        <span class="text-2xl invisible">&lsaquo;</span>
+      )}
+      <span class="text-white/50 text-sm">{currentIndex + 1} / {allPhotos.length}</span>
+      {next ? (
+        <a href={`/gallery/photo/${next.date}/${next.id}`} class="text-white/50 hover:text-white text-2xl">&rsaquo;</a>
+      ) : (
+        <span class="text-2xl invisible">&rsaquo;</span>
       )}
     </div>
 

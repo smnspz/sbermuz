@@ -1,56 +1,72 @@
-import { readdirSync, readFileSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
+const DIRECTUS_URL = import.meta.env.DIRECTUS_URL;
 
+/** A normalized event with display-ready fields and full asset URLs. */
 export interface Event {
+  /** Display name of the event. */
   title: string;
+  /** Human-readable date in `dd/mm/yyyy` format. */
   date: string;
-  description?: string;
-  ctaText?: string;
-  ctaUrl?: string;
+  /** Original ISO date string from Directus (e.g. `"2025-04-20T12:00:00"`). */
+  rawDate: string;
+  /** Full Directus asset URL for the event flyer image. */
   flyer: string;
+  /** Full Directus asset URLs for the event photos. */
   photos?: string[];
 }
 
-/** Extracts `001` from `/20250420/001-20250420.jpg` */
-export function getPhotoId(path: string): string {
-  const filename = path.split('/').pop() ?? '';
-  return filename.split('-')[0];
+/** Raw event shape returned by the Directus API. */
+interface DirectusEvent {
+  /** Event name as stored in Directus. */
+  name: string;
+  /** ISO date string (e.g. `"2025-04-20T12:00:00"`). */
+  date: string;
+  /** UUID of the flyer image asset. */
+  flyer: string;
+  /** Junction table entries linking to photo file UUIDs. */
+  photos?: { directus_files_id: string }[];
 }
 
-/** Extracts `20250420` from `/20250420/001-20250420.jpg` */
-export function getPhotoDate(path: string): string {
-  const parts = path.split('/').filter(Boolean);
-  return parts[0];
+/**
+ * Returns the 1-based index of a photo URL within its event's photos array.
+ * @param src - The full asset URL of the photo.
+ * @param photos - The event's photos array to search in.
+ * @returns The 1-based index as a string (e.g. `"3"`).
+ */
+export function getPhotoId(src: string, photos: string[]): string {
+  const index = photos.indexOf(src);
+  return String(index + 1);
 }
 
-export function getEvents(): Event[] {
-  const publicDir = join(process.cwd(), 'public');
-  const eventDirs = readdirSync(publicDir, { withFileTypes: true })
-    .filter((d) => d.isDirectory() && /^\d{8}$/.test(d.name))
-    .map((d) => d.name)
-    .sort((a, b) => b.localeCompare(a));
+/**
+ * Extracts a `YYYYMMDD` date slug from an ISO date string.
+ * @param dateStr - An ISO date string (e.g. `"2025-04-20T12:00:00"`).
+ * @returns The date formatted as `YYYYMMDD` (e.g. `"20250420"`).
+ */
+export function getPhotoDate(dateStr: string): string {
+  return dateStr.replace(/-/g, '').slice(0, 8);
+}
 
-  return eventDirs.map((dir) => {
-    const files = readdirSync(join(publicDir, dir));
-    const flyer = `/${dir}/flyer.jpg`;
-    const photos = files
-      .filter((f) => f !== 'flyer.jpg' && f !== 'info.json' && /\.(jpe?g|png|webp)$/i.test(f))
-      .sort()
-      .map((f) => `/${dir}/${f}`);
+/**
+ * Fetches all events from the Directus CMS, sorted by date descending.
+ * Photo and flyer paths are resolved to full Directus asset URLs.
+ * @returns All events with normalized fields and full asset URLs.
+ */
+export async function getEvents(): Promise<Event[]> {
+  const res = await fetch(`${DIRECTUS_URL}/items/event?fields=*,photos.directus_files_id&sort=-date`);
+  const json = await res.json();
+  const items: DirectusEvent[] = json.data;
 
-    const infoPath = join(publicDir, dir, 'info.json');
-    const info = existsSync(infoPath)
-      ? JSON.parse(readFileSync(infoPath, 'utf-8'))
-      : { title: dir, date: `${dir.slice(0, 4)}-${dir.slice(4, 6)}-${dir.slice(6, 8)}` };
+  return items.map((item) => {
+      const photos = item.photos?.map(
+        (p) => `${DIRECTUS_URL}/assets/${p.directus_files_id}`,
+      );
 
-    return {
-      title: info.title,
-      date: info.date,
-      description: info.description,
-      ctaText: info.ctaText,
-      ctaUrl: info.ctaUrl,
-      flyer,
-      photos: photos.length > 0 ? photos : undefined,
-    };
-  });
+      return {
+        title: item.name,
+        date: item.date.slice(8, 10) + '/' + item.date.slice(5, 7) + '/' + item.date.slice(0, 4),
+        rawDate: item.date,
+        flyer: `${DIRECTUS_URL}/assets/${item.flyer}`,
+        photos: photos && photos.length > 0 ? photos : undefined,
+      };
+    });
 }
