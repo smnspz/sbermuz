@@ -1,0 +1,118 @@
+---
+---
+
+<div id="lightbox" class="fixed inset-0 z-50 bg-black/90 hidden items-center justify-center" role="dialog" aria-modal="true">
+  <!-- Close button -->
+  <button id="lb-close" class="absolute top-4 right-4 text-white/70 hover:text-white text-3xl z-10 cursor-pointer" aria-label="Close">&times;</button>
+
+  <!-- Counter -->
+  <div id="lb-counter" class="absolute top-4 left-4 text-white/50 text-sm z-10"></div>
+
+  <!-- Prev -->
+  <button id="lb-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white text-4xl z-10 cursor-pointer" aria-label="Previous">&lsaquo;</button>
+
+  <!-- Image -->
+  <img id="lb-img" src="" alt="" class="max-h-[90vh] max-w-[90vw] object-contain" />
+
+  <!-- Next -->
+  <button id="lb-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white text-4xl z-10 cursor-pointer" aria-label="Next">&rsaquo;</button>
+</div>
+
+<script>
+  interface PhotoEntry {
+    src: string;
+    date: string;
+    id: string;
+  }
+
+  const lightbox = document.getElementById('lightbox')!;
+  const lbImg = document.getElementById('lb-img') as HTMLImageElement;
+  const lbClose = document.getElementById('lb-close')!;
+  const lbPrev = document.getElementById('lb-prev')!;
+  const lbNext = document.getElementById('lb-next')!;
+  const lbCounter = document.getElementById('lb-counter')!;
+
+  let allPhotos: PhotoEntry[] = [];
+  let currentIndex = 0;
+  let savedScrollY = 0;
+  let isOpen = false;
+
+  function collectPhotos() {
+    allPhotos = Array.from(document.querySelectorAll<HTMLImageElement>('[data-photo-src]')).map((img) => ({
+      src: img.dataset.photoSrc!,
+      date: img.dataset.photoDate!,
+      id: img.dataset.photoId!,
+    }));
+  }
+
+  function showPhoto(index: number) {
+    if (index < 0 || index >= allPhotos.length) return;
+    currentIndex = index;
+    const photo = allPhotos[currentIndex];
+    lbImg.src = photo.src;
+    lbCounter.textContent = `${currentIndex + 1} / ${allPhotos.length}`;
+    lbPrev.style.visibility = currentIndex > 0 ? 'visible' : 'hidden';
+    lbNext.style.visibility = currentIndex < allPhotos.length - 1 ? 'visible' : 'hidden';
+    history.replaceState({ lightbox: true, index: currentIndex }, '', `/gallery/photo/${photo.date}/${photo.id}`);
+  }
+
+  function openLightbox(index: number) {
+    collectPhotos();
+    savedScrollY = window.scrollY;
+    isOpen = true;
+    lightbox.classList.remove('hidden');
+    lightbox.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+    const photo = allPhotos[index];
+    history.pushState({ lightbox: true, index }, '', `/gallery/photo/${photo.date}/${photo.id}`);
+    showPhoto(index);
+  }
+
+  function closeLightbox() {
+    if (!isOpen) return;
+    isOpen = false;
+    lightbox.classList.add('hidden');
+    lightbox.classList.remove('flex');
+    document.body.style.overflow = '';
+    history.pushState(null, '', '/');
+    window.scrollTo(0, savedScrollY);
+  }
+
+  // Click on photo images
+  document.addEventListener('click', (e) => {
+    const img = (e.target as HTMLElement).closest<HTMLImageElement>('[data-photo-src]');
+    if (!img) return;
+    collectPhotos();
+    const index = allPhotos.findIndex((p) => p.src === img.dataset.photoSrc);
+    if (index !== -1) openLightbox(index);
+  });
+
+  // Close
+  lbClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  // Prev / Next buttons
+  lbPrev.addEventListener('click', (e) => { e.stopPropagation(); showPhoto(currentIndex - 1); });
+  lbNext.addEventListener('click', (e) => { e.stopPropagation(); showPhoto(currentIndex + 1); });
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (!isOpen) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') showPhoto(currentIndex - 1);
+    if (e.key === 'ArrowRight') showPhoto(currentIndex + 1);
+  });
+
+  // Browser back button
+  window.addEventListener('popstate', () => {
+    if (isOpen) {
+      isOpen = false;
+      lightbox.classList.add('hidden');
+      lightbox.classList.remove('flex');
+      document.body.style.overflow = '';
+      window.scrollTo(0, savedScrollY);
+    }
+  });
+</script>

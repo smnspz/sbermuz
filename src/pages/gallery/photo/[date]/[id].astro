@@ -1,0 +1,79 @@
+---
+import { getEvents, getPhotoId, getPhotoDate } from '../../../../lib/events';
+import '../../../../styles/global.css';
+
+export function getStaticPaths() {
+  const events = getEvents();
+  const paths: { params: { date: string; id: string }; props: { src: string; allPhotos: { src: string; date: string; id: string }[] } }[] = [];
+
+  for (const event of events) {
+    if (!event.photos) continue;
+    const eventPhotos = event.photos.map((p) => ({
+      src: p,
+      date: getPhotoDate(p),
+      id: getPhotoId(p),
+    }));
+    for (const photo of eventPhotos) {
+      paths.push({
+        params: { date: photo.date, id: photo.id },
+        props: { src: photo.src, allPhotos: eventPhotos },
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { src, allPhotos } = Astro.props;
+const { date, id } = Astro.params;
+
+const currentIndex = allPhotos.findIndex((p: { id: string }) => p.id === id);
+const prev = currentIndex > 0 ? allPhotos[currentIndex - 1] : null;
+const next = currentIndex < allPhotos.length - 1 ? allPhotos[currentIndex + 1] : null;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Photo {id} - Sbermuz</title>
+  </head>
+  <body class="bg-black m-0 h-full flex flex-col overflow-hidden">
+    <!-- Top bar -->
+    <div class="flex items-center justify-center md:justify-between px-4 py-3 shrink-0">
+      <a href="/" class="text-white/70 hover:text-white text-sm">&larr; torna al sito</a>
+      <span class="text-white/50 text-sm hidden md:inline">{currentIndex + 1} / {allPhotos.length}</span>
+    </div>
+
+    <!-- Navigation + Image -->
+    <div class="flex-1 flex items-center justify-center gap-4 px-4 pb-6 min-h-0 overflow-hidden">
+      {prev ? (
+        <a href={`/gallery/photo/${prev.date}/${prev.id}`} class="text-white/50 hover:text-white text-4xl shrink-0">&lsaquo;</a>
+      ) : (
+        <span class="text-4xl invisible shrink-0">&lsaquo;</span>
+      )}
+
+      <img src={src} alt="" class="max-h-[calc(100dvh-4rem)] max-w-full object-contain" />
+
+      {next ? (
+        <a href={`/gallery/photo/${next.date}/${next.id}`} class="text-white/50 hover:text-white text-4xl shrink-0">&rsaquo;</a>
+      ) : (
+        <span class="text-4xl invisible shrink-0">&rsaquo;</span>
+      )}
+    </div>
+
+    <script is:inline define:vars={{ prev, next }}>
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft' && prev) {
+          window.location.href = `/gallery/photo/${prev.date}/${prev.id}`;
+        }
+        if (e.key === 'ArrowRight' && next) {
+          window.location.href = `/gallery/photo/${next.date}/${next.id}`;
+        }
+        if (e.key === 'Escape') {
+          window.location.href = '/';
+        }
+      });
+    </script>
+  </body>
+</html>
