@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "sbermuz",
   "type": "module",
   "version": "0.0.1",
   "engines": {
@@ -17,6 +17,7 @@
     "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
+    "@types/node": "^25.9.1",
     "typescript": "^6.0.3"
   }
 }
