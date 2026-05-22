@@ -8,9 +8,12 @@ interface Props {
   eventSlug?: string;
 }
 
-import { Marquee } from '../atoms';
+import { Button, Marquee } from '../atoms';
+import { generateIcs } from '../../lib/calendar';
 
-const { title, description, image, date, ctaText, eventSlug } = Astro.props;
+const { title, description, image, date, rawDate, address, price, eventSlug } = Astro.props;
+
+const icsContent = generateIcs({ title, description, date: rawDate, address });
 ---
 
 <section class="min-h-[calc(100vh-var(--header-bottom,5rem))] md:h-[calc(100vh-var(--header-bottom,5rem))] flex flex-col px-6 pb-16 md:pb-0 max-w-6xl mx-auto">

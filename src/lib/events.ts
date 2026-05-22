@@ -53,14 +53,6 @@ export function getPhotoId(src: string, photos: string[]): string {
   return String(index + 1);
 }
 
-/**
- * Extracts a `YYYYMMDD` date slug from an ISO date string.
- * @param dateStr - An ISO date string (e.g. `"2025-04-20T12:00:00"`).
- * @returns The date formatted as `YYYYMMDD` (e.g. `"20250420"`).
- */
-export function getPhotoDate(dateStr: string): string {
-  return dateStr.replace(/-/g, '').slice(0, 8);
-}
 
 /**
  * Fetches all events from the Directus CMS, sorted by date descending.
