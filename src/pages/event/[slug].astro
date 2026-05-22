@@ -1,0 +1,128 @@
+---
+import { Header, Footer } from '../../components';
+import { getAllEventSlugs, getEventBySlug } from '../../lib/eventDetail';
+import '../../styles/global.css';
+
+export async function getStaticPaths() {
+  const slugs = await getAllEventSlugs();
+  return slugs.map(({ slug }) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const event = await getEventBySlug(slug!);
+
+if (!event) {
+  return Astro.redirect('/');
+}
+---
+
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&family=Unbounded:wght@400;700&display=swap" rel="stylesheet" />
+    <title>{event.title} - Collettivo Sbermuz</title>
+  </head>
+  <body class="bg-bg">
+    <Header />
+    <main>
+      <!-- Banner -->
+      <section class="relative w-full h-[60vh] min-h-100 overflow-hidden">
+        <img
+          src={event.flyer}
+          alt={event.title}
+          class="absolute inset-0 w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-black/50"></div>
+        <div class="absolute inset-0 flex flex-col items-center justify-end pb-12 px-6 text-white text-center">
+          <h1 class="text-4xl md:text-6xl font-bold font-display mb-4">{event.title}</h1>
+          <p class="text-lg opacity-80">{event.date}</p>
+        </div>
+      </section>
+
+      <!-- Back link -->
+      <div class="max-w-4xl mx-auto px-6 mt-8">
+        <a href="/" class="inline-flex items-center gap-2 text-sm hover:underline underline-offset-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+          torna alla home
+        </a>
+      </div>
+
+      <!-- Description -->
+      {event.description && (
+        <section class="max-w-4xl mx-auto px-6 mt-10">
+          <div class="text-lg leading-relaxed prose" set:html={event.description} />
+        </section>
+      )}
+
+      <!-- Artists -->
+      {event.artists.length > 0 && (
+        <section class="max-w-4xl mx-auto px-6 mt-16 mb-20">
+          <h2 class="text-3xl font-bold font-display mb-10">Line up</h2>
+          <div class="flex flex-col gap-12">
+            {event.artists.map((artist) => (
+              <div class="flex flex-col md:flex-row gap-6 items-start">
+                {artist.photo && (
+                  <img
+                    src={artist.photo}
+                    alt={artist.name}
+                    class="w-full md:w-48 h-48 object-cover rounded-lg shrink-0"
+                  />
+                )}
+                <div class="flex flex-col gap-3">
+                  <h3 class="text-2xl font-bold font-display">{artist.name}</h3>
+                  {artist.genres.length > 0 && (
+                    <div class="flex flex-wrap gap-2">
+                      {artist.genres.map((genre) => (
+                        <span class="px-3 py-1 text-xs font-bold uppercase border-2 border-black rounded-full">
+                          {genre}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {artist.description && (
+                    <p class="text-base leading-relaxed opacity-80">{artist.description}</p>
+                  )}
+                  <div class="flex gap-4 mt-1">
+                    {artist.spotifyUrl && (
+                      <a href={artist.spotifyUrl} target="_blank" rel="noopener noreferrer" class="text-sm hover:underline underline-offset-4">
+                        Spotify
+                      </a>
+                    )}
+                    {artist.bandcampUrl && (
+                      <a href={artist.bandcampUrl} target="_blank" rel="noopener noreferrer" class="text-sm hover:underline underline-offset-4">
+                        Bandcamp
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+      <!-- Map -->
+      {event.coordinates && (
+        <section class="max-w-4xl mx-auto px-6 mt-16 mb-20">
+          <h2 class="text-3xl font-bold font-display mb-6">Dove</h2>
+          <div class="rounded-lg overflow-hidden border-2 border-black shadow-[4px_4px_0_0_black]">
+            <iframe
+              title="Mappa evento"
+              width="100%"
+              height="350"
+              style="border:0"
+              loading="lazy"
+              src={`https://www.openstreetmap.org/export/embed.html?bbox=${event.coordinates[1] - 0.002}%2C${event.coordinates[0] - 0.001}%2C${event.coordinates[1] + 0.002}%2C${event.coordinates[0] + 0.001}&layer=mapnik&marker=${event.coordinates[0]}%2C${event.coordinates[1]}`}
+            />
+          </div>
+        </section>
+      )}
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -20,7 +20,7 @@ const [hero, events] = await Promise.all([getHero(), getEvents()]);
 	<body class="bg-bg">
 		<Header />
 		<main>
-			<Hero title={hero.title} description={hero.description} image={hero.image} date={hero.date} ctaText={hero.ctaText} ctaUrl={hero.ctaUrl} />
+			<Hero title={hero.title} description={hero.description} image={hero.image} date={hero.date} ctaText={hero.ctaText} eventSlug={hero.slug} />
 			<div id="gallery"></div>
 			{events.map((event) => (
 				<EventCarousel title={event.title} date={event.date} rawDate={event.rawDate} flyer={event.flyer} photos={event.photos} />

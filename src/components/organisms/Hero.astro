@@ -5,10 +5,10 @@ interface Props {
   image: string;
   date: string;
   ctaText?: string;
-  ctaUrl?: string;
+  eventSlug?: string;
 }
 
-const { title, description, image, date, ctaText, ctaUrl } = Astro.props;
+const { title, description, image, date, ctaText, eventSlug } = Astro.props;
 ---
 
 <section class="min-h-[calc(100vh-var(--header-bottom,5rem))] md:h-[calc(100vh-var(--header-bottom,5rem))] flex flex-col px-6 pb-16 md:pb-0 max-w-6xl mx-auto">
@@ -21,8 +21,8 @@ const { title, description, image, date, ctaText, ctaUrl } = Astro.props;
         <h2 class="text-5xl font-bold font-display hero-fade" style="--delay: 80ms">{title}</h2>
         <p class="text-base opacity-60 hero-fade" style="--delay: 160ms">{date}</p>
         <p class="text-lg leading-relaxed mt-2 hero-fade" style="--delay: 240ms">{description}</p>
-        {ctaText && ctaUrl && (
-          <a href={ctaUrl} target="_blank" rel="noopener noreferrer" class="inline-block mt-4 px-8 py-4 text-lg font-bold uppercase bg-bg border-2 border-black shadow-[4px_4px_0_0_black] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all hero-fade" style="--delay: 320ms">
+        {ctaText && eventSlug && (
+          <a href={`/event/${eventSlug}`} class="inline-block mt-4 px-8 py-4 text-lg font-bold uppercase bg-bg border-2 border-black shadow-[4px_4px_0_0_black] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all hero-fade" style="--delay: 320ms">
             {ctaText}
           </a>
         )}
