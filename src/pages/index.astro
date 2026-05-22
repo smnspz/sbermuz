@@ -27,7 +27,7 @@ const years = [...new Set(events.map((e) => e.rawDate.slice(0, 4)))].sort().reve
 			<div id="gallery"></div>
 			<h2 class="text-4xl md:text-5xl font-bold font-display text-center pt-16 pb-2">Archivio eventi</h2>
 			<nav class="flex flex-wrap gap-3 justify-center px-6 pt-4 pb-4 max-w-6xl mx-auto" aria-label="Filtra per anno">
-				<button data-filter="all" class="gallery-filter border-2 border-black px-4 py-1 font-bold font-display shadow-none translate-x-0.75 translate-y-0.75 hover:shadow-none hover:translate-x-0.75 hover:translate-y-0.75 transition-all bg-black text-white">Tutti</button>
+				<button data-filter="all" class="gallery-filter border-2 border-black px-4 py-1 font-bold font-display shadow-none translate-x-0.75	 translate-y-0.75 hover:shadow-none hover:translate-x-0.75 hover:translate-y-0.75 transition-all bg-black text-white">Tutti</button>
 				{years.map((y) => (
 					<button data-filter={y} class="gallery-filter border-2 border-black px-4 py-1 font-bold font-display shadow-[3px_3px_0_black] hover:shadow-none hover:translate-x-0.75 hover:translate-y-0.75 transition-all bg-white text-black">{y}</button>
 				))}
