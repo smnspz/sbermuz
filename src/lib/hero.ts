@@ -10,10 +10,14 @@ export interface Hero {
   description: string;
   /** Full Directus asset URL for the hero image. */
   image: string;
-  /** Human-readable date in `dd/mm/yyyy` format. */
+  /** Italian-formatted date with time. */
   date: string;
-  /** Optional call-to-action label. */
-  ctaText?: string;
+  /** Raw ISO date string for calendar generation. */
+  rawDate: string;
+  /** Event address string. */
+  address?: string;
+  /** Event price text (null = free). */
+  price?: string;
   /** Slug for the associated event detail page. */
   slug?: string;
   /** ID of the associated event in Directus. */
@@ -22,29 +26,38 @@ export interface Hero {
 
 /**
  * Fetches the hero section data from the Directus CMS.
- * @returns The hero content with resolved asset URL and event slug.
+ * @returns The hero content with resolved asset URL, event slug, and event details.
  */
 export async function getHero(): Promise<Hero> {
   const res = await fetch(`${DIRECTUS_URL}/items/hero`);
   const json = await res.json();
   const item = json.data;
 
-  // Fetch event name to derive slug
   let slug: string | undefined;
+  let address: string | undefined;
+  let price: string | undefined;
+  let eventDate = item.date;
+
   if (item.event) {
     const eventRes = await fetch(
-      `${DIRECTUS_URL}/items/event/${item.event}?fields=name`,
+      `${DIRECTUS_URL}/items/event/${item.event}?fields=name,date,address,price`,
     );
     const eventJson = await eventRes.json();
-    slug = slugify(eventJson.data.name);
+    const event = eventJson.data;
+    slug = slugify(event.name);
+    address = event.address ?? undefined;
+    price = event.price ?? undefined;
+    eventDate = event.date;
   }
 
   return {
     title: item.title,
     description: item.description,
     image: `${DIRECTUS_URL}/assets/${item.image}`,
-    date: item.date.slice(8, 10) + '/' + item.date.slice(5, 7) + '/' + item.date.slice(0, 4),
-    ctaText: item.cta_text ?? undefined,
+    date: formatItalianDate(eventDate),
+    rawDate: eventDate,
+    address,
+    price,
     slug,
     eventId: item.event,
   };

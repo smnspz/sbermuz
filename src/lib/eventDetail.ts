@@ -99,8 +99,8 @@ export async function getEventBySlug(slug: string): Promise<EventDetail | null> 
   );
 
   // GeoJSON Point comes as [longitude, latitude] — flip to [lat, lon]
-  const coordinates: [number, number] | undefined = item.address?.coordinates
-    ? [item.address.coordinates[1], item.address.coordinates[0]]
+  const coordinates: [number, number] | undefined = item.address_coordinates?.coordinates
+    ? [item.address_coordinates.coordinates[1], item.address_coordinates.coordinates[0]]
     : undefined;
 
   return {
