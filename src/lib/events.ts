@@ -1,5 +1,19 @@
 const DIRECTUS_URL = import.meta.env.DIRECTUS_URL;
 
+/** A normalized artist. */
+export interface Artist {
+  /** Artist name. */
+  name: string;
+  /** Short bio. */
+  description: string;
+  /** Full Directus asset URL for the artist photo. */
+  photo: string;
+  /** Spotify artist page URL. */
+  spotifyUrl?: string;
+  /** Bandcamp page URL. */
+  bandcampUrl?: string;
+}
+
 /** A normalized event with display-ready fields and full asset URLs. */
 export interface Event {
   /** Display name of the event. */
@@ -22,6 +36,8 @@ interface DirectusEvent {
   date: string;
   /** UUID of the flyer image asset. */
   flyer: string;
+  /** Whether this event should appear in the gallery. */
+  show_in_gallery: boolean;
   /** Junction table entries linking to photo file UUIDs. */
   photos?: { directus_files_id: string }[];
 }
@@ -56,7 +72,7 @@ export async function getEvents(): Promise<Event[]> {
   const json = await res.json();
   const items: DirectusEvent[] = json.data;
 
-  return items.map((item) => {
+  return items.filter((item) => item.show_in_gallery).map((item) => {
       const photos = item.photos?.map(
         (p) => `${DIRECTUS_URL}/assets/${p.directus_files_id}`,
       );
