@@ -1,5 +1,5 @@
 ---
-import { Header, Hero, EventCarousel, Footer, Lightbox } from '../components';
+import { Header, Hero, InfoBar, EventCarousel, Footer, Lightbox } from '../components';
 import { getEvents } from '../lib/events';
 import { getHero } from '../lib/hero';
 import '../styles/global.css';
@@ -21,6 +21,7 @@ const [hero, events] = await Promise.all([getHero(), getEvents()]);
 		<Header />
 		<main>
 			<Hero title={hero.title} description={hero.description} image={hero.image} date={hero.date} rawDate={hero.rawDate} address={hero.address} price={hero.price} eventSlug={hero.slug} />
+			<InfoBar />
 			<div id="gallery"></div>
 			{events.map((event) => (
 				<EventCarousel title={event.title} date={event.date} rawDate={event.rawDate} flyer={event.flyer} photos={event.photos} />

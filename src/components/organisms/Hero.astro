@@ -77,12 +77,7 @@ const icsContent = generateIcs({ title, description, date: rawDate, address });
       </div>
     </div>
   </div>
-  <a href="#gallery" id="scroll-hint" class="hidden md:flex flex-col items-center gap-4 pb-10 hover:opacity-80 transition-opacity duration-300 cursor-pointer no-underline shrink-0 hero-fade" style="--delay: 400ms; --end-opacity: 0.5">
-    <p class="text-sm">scrolla per le foto degli eventi passati</p>
-    <svg class="w-7 h-7 animate-bounce" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="6 9 12 15 18 9" />
-    </svg>
-  </a>
+
 </section>
 
 <Marquee text="foto eventi passati" class="md:hidden mt-8" />
@@ -107,13 +102,6 @@ const icsContent = generateIcs({ title, description, date: rawDate, address });
 </style>
 
 <script>
-  const hint = document.getElementById('scroll-hint');
-  if (hint) {
-    window.addEventListener('scroll', () => {
-      hint.style.opacity = String(Math.max(0, 0.5 - window.scrollY / 800));
-    });
-  }
-
   const calBtn = document.getElementById('add-to-calendar');
   calBtn?.addEventListener('click', () => {
     const ics = calBtn.dataset.ics;
