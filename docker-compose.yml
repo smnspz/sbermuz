@@ -1,0 +1,13 @@
+services:
+  sbermuz:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sbermuz
+    restart: unless-stopped
+    networks:
+      - caddy-network
+
+networks:
+  caddy-network:
+    external: true
