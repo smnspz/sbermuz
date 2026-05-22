@@ -33,7 +33,7 @@ const years = [...new Set(events.map((e) => e.rawDate.slice(0, 4)))].sort().reve
 				<div class="max-w-6xl mx-auto">
 					<h3 class="text-xs font-bold uppercase tracking-wide opacity-50 mb-3">Sei una band?</h3>
 					<p class="text-2xl font-bold font-display mb-6">Vuoi suonare a Genova con noi?</p>
-					<Button href="mailto:collettivosbermuz@gmail.com" class="w-full justify-center border-white shadow-[4px_4px_0_0_rgba(255,255,255,0.3)]">Scrivici per suonare</Button>
+					<Button href="mailto:collettivosbermuz@gmail.com" class="w-full justify-center text-black border-white shadow-[4px_4px_0_0_rgba(255,255,255,0.3)]">Scrivici per suonare</Button>
 				</div>
 			</section>
 
@@ -48,12 +48,13 @@ const years = [...new Set(events.map((e) => e.rawDate.slice(0, 4)))].sort().reve
 			{events.map((event) => (
 				<EventCarousel title={event.title} date={event.date} rawDate={event.rawDate} flyer={event.flyer} photos={event.photos} year={event.rawDate.slice(0, 4)} />
 			))}
+			
 			<!-- Mobile: "Chi siamo" + "Newsletter" after gallery -->
 			<section class="md:hidden border-t-4 border-black py-10 px-6">
 				<div class="max-w-6xl mx-auto grid grid-cols-1 gap-8">
 					<div>
 						<h3 class="text-xs font-bold uppercase tracking-wide opacity-50 mb-3">Chi siamo</h3>
-						<p class="text-base leading-relaxed">Collettivo musicale genovese. Organizziamo concerti dal 20XX.</p>
+						<p class="text-base leading-relaxed">Collettivo musicale genovese. Organizziamo concerti dal 2024.</p>
 					</div>
 					<div>
 						<h3 class="text-xs font-bold uppercase tracking-wide opacity-50 mb-3">Newsletter</h3>
