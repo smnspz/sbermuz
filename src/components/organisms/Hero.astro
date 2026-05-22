@@ -8,6 +8,8 @@ interface Props {
   eventSlug?: string;
 }
 
+import { Marquee } from '../atoms';
+
 const { title, description, image, date, ctaText, eventSlug } = Astro.props;
 ---
 
@@ -39,21 +41,7 @@ const { title, description, image, date, ctaText, eventSlug } = Astro.props;
 
 </section>
 
-<!-- Mobile marquee separator -->
-<div class="md:hidden mt-8 w-full overflow-hidden border-y-2 border-black py-3 bg-black text-white">
-  <div class="marquee-track flex whitespace-nowrap gap-8 text-sm font-bold uppercase">
-    <span>foto eventi passati</span><span>&middot;</span>
-    <span>foto eventi passati</span><span>&middot;</span>
-    <span>foto eventi passati</span><span>&middot;</span>
-    <span>foto eventi passati</span><span>&middot;</span>
-    <span>foto eventi passati</span><span>&middot;</span>
-    <span>foto eventi passati</span><span>&middot;</span>
-    <span>foto eventi passati</span><span>&middot;</span>
-    <span>foto eventi passati</span><span>&middot;</span>
-    <span>foto eventi passati</span><span>&middot;</span>
-    <span>foto eventi passati</span><span>&middot;</span>
-  </div>
-</div>
+<Marquee text="foto eventi passati" class="md:hidden mt-8" />
 
 <style>
   @keyframes hero-drop {
@@ -74,16 +62,7 @@ const { title, description, image, date, ctaText, eventSlug } = Astro.props;
   }
 </style>
 
-<style is:global>
-  @keyframes marquee-scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
 
-  .marquee-track {
-    animation: marquee-scroll 12s linear infinite;
-  }
-</style>
 
 
 <script>
