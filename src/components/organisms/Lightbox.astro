@@ -87,6 +87,23 @@
     if (index !== -1) openLightbox(index);
   });
 
+  // Click on flyer images (solo view, no gallery navigation)
+  document.addEventListener('click', (e) => {
+    const img = (e.target as HTMLElement).closest<HTMLImageElement>('[data-flyer-src]');
+    if (!img) return;
+    savedScrollY = window.scrollY;
+    isOpen = true;
+    allPhotos = [{ src: img.dataset.flyerSrc!, date: '', id: '' }];
+    currentIndex = 0;
+    lbImg.src = img.dataset.flyerSrc!;
+    lbCounter.textContent = '';
+    lbPrev.style.visibility = 'hidden';
+    lbNext.style.visibility = 'hidden';
+    lightbox.classList.remove('hidden');
+    lightbox.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  });
+
   // Close
   lbClose.addEventListener('click', closeLightbox);
   lightbox.addEventListener('click', (e) => {

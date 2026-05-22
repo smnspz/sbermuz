@@ -40,7 +40,7 @@ const photoDate = hasPhotos ? getPhotoDate(rawDate) : '';
     <div class="md:sticky md:top-[calc(var(--header-bottom)+1rem)] md:self-start text-center">
       <h2 class="text-3xl font-bold font-display mt-8">{title}</h2>
       <p class="text-sm opacity-60 mt-1 mb-6">{date}</p>
-      <img src={flyer} alt="" class="w-full block rounded-lg" />
+      <img src={flyer} alt="" class="w-full block rounded-lg cursor-pointer" data-flyer-src={flyer} />
     </div>
 
     <PhotoColumn photos={rightPhotos} date={photoDate} class="hidden md:flex flex-col gap-40 mt-12" />
@@ -51,7 +51,7 @@ const photoDate = hasPhotos ? getPhotoDate(rawDate) : '';
 ) : (
   <section class="min-h-[calc(100vh-5rem)] relative grid grid-cols-1 md:grid-cols-2 gap-12 px-6 pb-20 max-w-5xl mx-auto items-center">
     <div class="flex justify-center">
-      <img src={flyer} alt="" class="w-full max-w-sm block rounded-lg" />
+      <img src={flyer} alt="" class="w-full max-w-sm block rounded-lg cursor-pointer" data-flyer-src={flyer} />
     </div>
     <div class="flex flex-col gap-4">
       <h2 class="text-3xl font-bold font-display">{title}</h2>
