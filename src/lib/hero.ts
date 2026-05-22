@@ -2,8 +2,6 @@ import { DIRECTUS_URL } from './constants';
 import { formatItalianDate } from './datetime';
 import { slugify } from './eventDetail';
 
-const DIRECTUS_URL = import.meta.env.DIRECTUS_URL;
-
 /** Hero section data. */
 export interface Hero {
   /** Hero title. */

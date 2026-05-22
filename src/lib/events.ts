@@ -1,4 +1,4 @@
-const DIRECTUS_URL = import.meta.env.DIRECTUS_URL;
+import { DIRECTUS_URL } from './constants';
 
 /** A normalized artist. */
 export interface Artist {
