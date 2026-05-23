@@ -4,11 +4,11 @@ import { slugify } from './eventDetail';
 
 /** Hero section data. */
 export interface Hero {
-  /** Hero title. */
+  /** Hero title (event name). */
   title: string;
-  /** Hero description text. */
+  /** Hero description text (event description, raw markdown). */
   description: string;
-  /** Full Directus asset URL for the hero image. */
+  /** Full Directus asset URL for the hero image (event flyer). */
   image: string;
   /** Italian-formatted date with time. */
   date: string;
@@ -21,47 +21,33 @@ export interface Hero {
   /** Event price text (null = free). */
   price?: string;
   /** Slug for the associated event detail page. */
-  slug?: string;
+  slug: string;
   /** ID of the associated event in Directus. */
   eventId: number;
 }
 
 /**
  * Fetches the hero section data from the Directus CMS.
+ * All hero data comes from the linked event.
  * @returns The hero content with resolved asset URL, event slug, and event details.
  */
 export async function getHero(): Promise<Hero> {
-  const res = await fetch(`${DIRECTUS_URL}/items/hero`);
+  const res = await fetch(
+    `${DIRECTUS_URL}/items/hero?fields=event.*,event.address_id.full_address`,
+  );
   const json = await res.json();
-  const item = json.data;
-
-  let slug: string | undefined;
-  let address: string | undefined;
-  let price: string | undefined;
-  let eventDate = item.date;
-
-  if (item.event) {
-    const eventRes = await fetch(
-      `${DIRECTUS_URL}/items/event/${item.event}?fields=name,date,address_id.full_address,price`,
-    );
-    const eventJson = await eventRes.json();
-    const event = eventJson.data;
-    slug = slugify(event.name);
-    address = event.address_id?.full_address ?? undefined;
-    price = event.price ?? undefined;
-    eventDate = event.date;
-  }
+  const event = json.data.event;
 
   return {
-    title: item.title,
-    description: item.description,
-    image: `${DIRECTUS_URL}/assets/${item.image}`,
-    date: formatDate(eventDate, 'it'),
-    dateEn: formatDate(eventDate, 'en'),
-    rawDate: eventDate,
-    address,
-    price,
-    slug,
-    eventId: item.event,
+    title: event.name,
+    description: event.description ?? '',
+    image: `${DIRECTUS_URL}/assets/${event.flyer}`,
+    date: formatDate(event.date, 'it'),
+    dateEn: formatDate(event.date, 'en'),
+    rawDate: event.date,
+    address: event.address_id?.full_address ?? undefined,
+    price: event.price ?? undefined,
+    slug: slugify(event.name),
+    eventId: event.id,
   };
 }
