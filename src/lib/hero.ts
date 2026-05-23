@@ -40,12 +40,12 @@ export async function getHero(): Promise<Hero> {
 
   if (item.event) {
     const eventRes = await fetch(
-      `${DIRECTUS_URL}/items/event/${item.event}?fields=name,date,address,price`,
+      `${DIRECTUS_URL}/items/event/${item.event}?fields=name,date,address_id.full_address,price`,
     );
     const eventJson = await eventRes.json();
     const event = eventJson.data;
     slug = slugify(event.name);
-    address = event.address ?? undefined;
+    address = event.address_id?.full_address ?? undefined;
     price = event.price ?? undefined;
     eventDate = event.date;
   }

@@ -77,7 +77,7 @@ export async function getEventBySlug(slug: string): Promise<EventDetail | null> 
 
   // Fetch full detail with artists
   const res = await fetch(
-    `${DIRECTUS_URL}/items/event/${match.id}?fields=*,artists.artist_id.*`,
+    `${DIRECTUS_URL}/items/event/${match.id}?fields=*,address_id.full_address,address_id.coordinates,artists.artist_id.*`,
   );
   const json = await res.json();
   const item = json.data;
@@ -99,8 +99,8 @@ export async function getEventBySlug(slug: string): Promise<EventDetail | null> 
   );
 
   // GeoJSON Point comes as [longitude, latitude] — flip to [lat, lon]
-  const coordinates: [number, number] | undefined = item.address_coordinates?.coordinates
-    ? [item.address_coordinates.coordinates[1], item.address_coordinates.coordinates[0]]
+  const coordinates: [number, number] | undefined = item.address_id?.coordinates?.coordinates
+    ? [item.address_id.coordinates.coordinates[1], item.address_id.coordinates.coordinates[0]]
     : undefined;
 
   return {
