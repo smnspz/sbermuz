@@ -1,22 +1,37 @@
 ---
 import { Logo } from '../atoms';
+import { t, type Locale } from '../../lib/i18n';
+
+interface Props {
+	locale?: Locale;
+}
+
+const { locale = 'it' } = Astro.props;
+const homeHref = locale === 'en' ? '/en/' : '/';
+const aboutHref = locale === 'en' ? '/en/#chi-siamo' : '/#chi-siamo';
+const galleryHref = locale === 'en' ? '/en/#gallery' : '/#gallery';
+
+const currentPath = Astro.url.pathname;
+const switchHref = locale === 'en'
+	? currentPath.replace(/^\/en\/?/, '/')
+	: `/en${currentPath}`;
+const switchLabel = locale === 'en' ? 'IT' : 'EN';
 ---
 
 <!-- Top fade gradient -->
 <div class="hidden md:block fixed top-0 left-0 right-0 h-20 bg-linear-to-b from-white/60 to-transparent z-30 pointer-events-none"></div>
 
 <header class="flex items-center justify-between px-6 py-5 mb-6 w-full gap-12 bg-white/80 backdrop-blur-md md:bg-white md:border-2 md:border-black md:shadow-[4px_4px_0_0_black] sticky top-0 z-40 md:px-12 md:mt-4 md:mx-auto md:max-w-2xl md:rounded-full md:top-4">
-	<a href="/">
+	<a href={homeHref}>
 		<Logo />
 	</a>
 
-	<!-- TODO: Links will be dynamically fetched by cms? -->
-
 	<!-- Desktop nav -->
 	<nav class="hidden md:flex gap-6 text-base">
-		<a href="/#chi-siamo" class="hover:underline underline-offset-4">chi siamo</a>
-		<a href="/#gallery" class="hover:underline underline-offset-4">archivio</a>
-		<a href="https://collettivosbermuz.bandcamp.com/" target="_blank" rel="noopener noreferrer" class="hover:underline underline-offset-4">ascolta</a>
+		<a href={aboutHref} class="hover:underline underline-offset-4">{t('nav.about', locale)}</a>
+		<a href={galleryHref} class="hover:underline underline-offset-4">{t('nav.archive', locale)}</a>
+		<a href="https://collettivosbermuz.bandcamp.com/" target="_blank" rel="noopener noreferrer" class="hover:underline underline-offset-4">{t('nav.listen', locale)}</a>
+		<a href={switchHref} class="hover:underline underline-offset-4 font-bold">{switchLabel}</a>
 	</nav>
 
 	<!-- Mobile hamburger button -->
@@ -37,28 +52,24 @@ import { Logo } from '../atoms';
 			<line x1="6" y1="6" x2="18" y2="18" />
 		</svg>
 	</button>
-	<a href="/#chi-siamo" class="hover:underline underline-offset-4 mobile-menu-link">chi siamo</a>
-	<a href="/#gallery" class="hover:underline underline-offset-4 mobile-menu-link">archivio</a>
-	<a href="https://collettivosbermuz.bandcamp.com/" target="_blank" rel="noopener noreferrer" class="hover:underline underline-offset-4">ascolta</a>
+	<a href={aboutHref} class="hover:underline underline-offset-4 mobile-menu-link">{t('nav.about', locale)}</a>
+	<a href={galleryHref} class="hover:underline underline-offset-4 mobile-menu-link">{t('nav.archive', locale)}</a>
+	<a href="https://collettivosbermuz.bandcamp.com/" target="_blank" rel="noopener noreferrer" class="hover:underline underline-offset-4">{t('nav.listen', locale)}</a>
+	<a href={switchHref} class="hover:underline underline-offset-4 font-bold text-lg mobile-menu-link">{switchLabel}</a>
 	<a href="https://www.instagram.com/collettivo_sbermuz/" target="_blank" rel="noopener noreferrer" class="absolute bottom-8" aria-label="Instagram">
 		<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
 	</a>
 </div>
 
 <script>
-	// Expose the header's bottom edge as a CSS variable so other components
-	// (Hero height, EventCarousel sticky offset) can position relative to it
 	const header = document.querySelector('header');
 	if (header) {
 		const update = () => {
-			// distance from viewport top to header bottom
-			const bottom = header.getBoundingClientRect().bottom; 
+			const bottom = header.getBoundingClientRect().bottom;
 			document.documentElement.style.setProperty('--header-bottom', `${bottom}px`);
 		};
-		// set on load
-		update(); 
-		// recalculate on resize
-		window.addEventListener('resize', update); 
+		update();
+		window.addEventListener('resize', update);
 	}
 
 	const openBtn = document.getElementById('menu-open');
@@ -77,7 +88,6 @@ import { Logo } from '../atoms';
 
 	closeBtn?.addEventListener('click', closeMenu);
 
-	// Close mobile menu when clicking in-page links
 	menu?.querySelectorAll('.mobile-menu-link').forEach((link) => {
 		link.addEventListener('click', closeMenu);
 	});

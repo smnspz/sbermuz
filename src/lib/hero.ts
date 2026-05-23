@@ -1,5 +1,5 @@
 import { DIRECTUS_URL } from './constants';
-import { formatItalianDate } from './datetime';
+import { formatDate } from './datetime';
 import { slugify } from './eventDetail';
 
 /** Hero section data. */
@@ -12,6 +12,8 @@ export interface Hero {
   image: string;
   /** Italian-formatted date with time. */
   date: string;
+  /** English-formatted date with time. */
+  dateEn: string;
   /** Raw ISO date string for calendar generation. */
   rawDate: string;
   /** Event address string. */
@@ -40,12 +42,12 @@ export async function getHero(): Promise<Hero> {
 
   if (item.event) {
     const eventRes = await fetch(
-      `${DIRECTUS_URL}/items/event/${item.event}?fields=name,date,address,price`,
+      `${DIRECTUS_URL}/items/event/${item.event}?fields=name,date,address_id.full_address,price`,
     );
     const eventJson = await eventRes.json();
     const event = eventJson.data;
     slug = slugify(event.name);
-    address = event.address ?? undefined;
+    address = event.address_id?.full_address ?? undefined;
     price = event.price ?? undefined;
     eventDate = event.date;
   }
@@ -54,7 +56,8 @@ export async function getHero(): Promise<Hero> {
     title: item.title,
     description: item.description,
     image: `${DIRECTUS_URL}/assets/${item.image}`,
-    date: formatItalianDate(eventDate),
+    date: formatDate(eventDate, 'it'),
+    dateEn: formatDate(eventDate, 'en'),
     rawDate: eventDate,
     address,
     price,

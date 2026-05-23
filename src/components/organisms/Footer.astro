@@ -1,5 +1,14 @@
 ---
 import { Logo } from '../atoms';
+import { t, type Locale } from '../../lib/i18n';
+
+interface Props {
+	locale?: Locale;
+}
+
+const { locale = 'it' } = Astro.props;
+const aboutHref = locale === 'en' ? '/en/#chi-siamo' : '/#chi-siamo';
+const galleryHref = locale === 'en' ? '/en/#gallery' : '/#gallery';
 ---
 
 <footer class="md:mt-20 bg-black text-white pt-1 pb-16 px-6">
@@ -8,8 +17,8 @@ import { Logo } from '../atoms';
       <div class="flex flex-col items-center gap-4 md:flex-row md:justify-between md:items-center flex-wrap">
         <Logo class="h-8 invert" />
         <nav class="flex gap-4 md:gap-8 text-sm text-white flex-wrap justify-center">
-          <a href="/#chi-siamo" class="hover:text-white transition-colors">Chi siamo</a>
-          <a href="/#gallery" class="hover:text-white transition-colors">Archivio</a>
+          <a href={aboutHref} class="hover:text-white transition-colors">{t('footer.about', locale)}</a>
+          <a href={galleryHref} class="hover:text-white transition-colors">{t('footer.archive', locale)}</a>
           <a href="https://www.instagram.com/collettivo_sbermuz/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">Instagram</a>
         </nav>
       </div>

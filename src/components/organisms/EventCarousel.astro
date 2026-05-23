@@ -1,17 +1,21 @@
 ---
 import { PhotoColumn } from '../molecules';
 import { getPhotoDate } from '../../lib/datetime';
+import type { Locale } from '../../lib/i18n';
 
 interface Props {
   title: string;
   date: string;
+  dateEn: string;
   rawDate: string;
   flyer: string;
   photos?: string[];
   year: string;
+  locale?: Locale;
 }
 
-const { title, date, rawDate, flyer, photos, year } = Astro.props;
+const { title, date, dateEn, rawDate, flyer, photos, year, locale = 'it' } = Astro.props;
+const displayDate = locale === 'en' ? dateEn : date;
 
 interface PhotoItem {
   src: string;
@@ -40,7 +44,7 @@ const photoDate = hasPhotos ? getPhotoDate(rawDate) : '';
 
     <div class="md:sticky md:top-[calc(var(--header-bottom)+1rem)] md:self-start text-center">
       <h2 class="text-3xl font-bold font-display mt-8">{title}</h2>
-      <p class="text-sm opacity-60 mt-1 mb-6">{date}</p>
+      <p class="text-sm opacity-60 mt-1 mb-6">{displayDate}</p>
       <img src={flyer} alt="" class="w-full block rounded-lg cursor-pointer" data-flyer-src={flyer} />
     </div>
 
@@ -56,7 +60,7 @@ const photoDate = hasPhotos ? getPhotoDate(rawDate) : '';
     </div>
     <div class="flex flex-col gap-4">
       <h2 class="text-3xl font-bold font-display">{title}</h2>
-      <p class="text-sm opacity-60">{date}</p>
+      <p class="text-sm opacity-60">{displayDate}</p>
     </div>
   </section>
 )}

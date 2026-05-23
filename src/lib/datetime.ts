@@ -1,11 +1,12 @@
 import { DAYS, MONTHS } from './constants';
+import type { Locale } from './i18n';
 
-/** Formats an ISO date string to Italian format: "Ven 22 maggio 2026 · 21:00" */
-export function formatItalianDate(iso: string): string {
+/** Formats an ISO date string to a localized format: "Ven 22 maggio 2026 · 21:00" */
+export function formatDate(iso: string, locale: Locale = 'it'): string {
   const d = new Date(iso);
-  const day = DAYS[d.getDay()];
+  const day = DAYS[locale][d.getDay()];
   const date = d.getDate();
-  const month = MONTHS[d.getMonth()];
+  const month = MONTHS[locale][d.getMonth()];
   const year = d.getFullYear();
   const hours = String(d.getHours()).padStart(2, '0');
   const minutes = String(d.getMinutes()).padStart(2, '0');

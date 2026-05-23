@@ -18,8 +18,10 @@ export interface Artist {
 export interface Event {
   /** Display name of the event. */
   title: string;
-  /** Human-readable date in `dd/mm/yyyy` format. */
+  /** Human-readable date in `dd/mm/yyyy` format (Italian). */
   date: string;
+  /** Human-readable date in `mm/dd/yyyy` format (English). */
+  dateEn: string;
   /** Original ISO date string from Directus (e.g. `"2025-04-20T12:00:00"`). */
   rawDate: string;
   /** Full Directus asset URL for the event flyer image. */
@@ -72,6 +74,7 @@ export async function getEvents(): Promise<Event[]> {
       return {
         title: item.name,
         date: item.date.slice(8, 10) + '/' + item.date.slice(5, 7) + '/' + item.date.slice(0, 4),
+        dateEn: item.date.slice(5, 7) + '/' + item.date.slice(8, 10) + '/' + item.date.slice(0, 4),
         rawDate: item.date,
         flyer: `${DIRECTUS_URL}/assets/${item.flyer}`,
         photos: photos && photos.length > 0 ? photos : undefined,

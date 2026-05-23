@@ -22,6 +22,7 @@ export interface DetailArtist {
 export interface EventDetail {
   title: string;
   date: string;
+  dateEn: string;
   description: string;
   flyer: string;
   /** [latitude, longitude] if the event has coordinates. */
@@ -77,7 +78,7 @@ export async function getEventBySlug(slug: string): Promise<EventDetail | null> 
 
   // Fetch full detail with artists
   const res = await fetch(
-    `${DIRECTUS_URL}/items/event/${match.id}?fields=*,artists.artist_id.*`,
+    `${DIRECTUS_URL}/items/event/${match.id}?fields=*,address_id.*,artists.artist_id.*`,
   );
   const json = await res.json();
   const item = json.data;
@@ -99,8 +100,8 @@ export async function getEventBySlug(slug: string): Promise<EventDetail | null> 
   );
 
   // GeoJSON Point comes as [longitude, latitude] — flip to [lat, lon]
-  const coordinates: [number, number] | undefined = item.address_coordinates?.coordinates
-    ? [item.address_coordinates.coordinates[1], item.address_coordinates.coordinates[0]]
+  const coordinates: [number, number] | undefined = item.address_id?.coordinates?.coordinates
+    ? [item.address_id.coordinates.coordinates[1], item.address_id.coordinates.coordinates[0]]
     : undefined;
 
   return {
@@ -109,6 +110,12 @@ export async function getEventBySlug(slug: string): Promise<EventDetail | null> 
       item.date.slice(8, 10) +
       '/' +
       item.date.slice(5, 7) +
+      '/' +
+      item.date.slice(0, 4),
+    dateEn:
+      item.date.slice(5, 7) +
+      '/' +
+      item.date.slice(8, 10) +
       '/' +
       item.date.slice(0, 4),
     description: item.description ? await marked.parse(item.description) : '',

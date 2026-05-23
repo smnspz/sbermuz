@@ -1,10 +1,10 @@
 ---
-import BaseLayout from '../../../../layouts/BaseLayout.astro';
-import { getEvents } from '../../../../lib/events';
-import { getPhotoDate } from '../../../../lib/datetime';
-import { t } from '../../../../lib/i18n';
+import BaseLayout from '../../../../../layouts/BaseLayout.astro';
+import { getEvents } from '../../../../../lib/events';
+import { getPhotoDate } from '../../../../../lib/datetime';
+import { t } from '../../../../../lib/i18n';
 
-const locale = 'it' as const;
+const locale = 'en' as const;
 
 export async function getStaticPaths() {
   const events = await getEvents();
@@ -40,14 +40,14 @@ const next = currentIndex < allPhotos.length - 1 ? allPhotos[currentIndex + 1] :
 <BaseLayout locale={locale} title={`Photo ${id} - Sbermuz`} bodyClass="bg-black m-0 h-dvh flex flex-col overflow-hidden">
     <!-- Top bar -->
     <div class="flex items-center justify-center md:justify-between px-4 py-3 shrink-0">
-      <a href="/" class="text-white/70 hover:text-white text-sm">&larr; {t('photo.back', locale)}</a>
+      <a href="/en/" class="text-white/70 hover:text-white text-sm">&larr; {t('photo.back', locale)}</a>
       <span class="text-white/50 text-sm hidden md:inline">{currentIndex + 1} / {allPhotos.length}</span>
     </div>
 
     <!-- Image -->
     <div class="flex-1 flex items-center justify-center px-4 md:px-12 md:gap-8 min-h-0 overflow-hidden">
       {prev ? (
-        <a href={`/gallery/photo/${prev.date}/${prev.id}`} class="hidden md:block text-white/50 hover:text-white text-4xl shrink-0">&lsaquo;</a>
+        <a href={`/en/gallery/photo/${prev.date}/${prev.id}`} class="hidden md:block text-white/50 hover:text-white text-4xl shrink-0">&lsaquo;</a>
       ) : (
         <span class="hidden md:block text-4xl invisible shrink-0">&lsaquo;</span>
       )}
@@ -55,7 +55,7 @@ const next = currentIndex < allPhotos.length - 1 ? allPhotos[currentIndex + 1] :
       <img src={src} alt="" class="max-h-[calc(100dvh-7rem)] md:max-h-[calc(100dvh-4rem)] max-w-full object-contain" />
 
       {next ? (
-        <a href={`/gallery/photo/${next.date}/${next.id}`} class="hidden md:block text-white/50 hover:text-white text-4xl shrink-0">&rsaquo;</a>
+        <a href={`/en/gallery/photo/${next.date}/${next.id}`} class="hidden md:block text-white/50 hover:text-white text-4xl shrink-0">&rsaquo;</a>
       ) : (
         <span class="hidden md:block text-4xl invisible shrink-0">&rsaquo;</span>
       )}
@@ -64,13 +64,13 @@ const next = currentIndex < allPhotos.length - 1 ? allPhotos[currentIndex + 1] :
     <!-- Mobile bottom nav -->
     <div class="flex md:hidden items-center justify-between px-6 py-3 shrink-0">
       {prev ? (
-        <a href={`/gallery/photo/${prev.date}/${prev.id}`} class="text-white/50 hover:text-white text-2xl">&lsaquo;</a>
+        <a href={`/en/gallery/photo/${prev.date}/${prev.id}`} class="text-white/50 hover:text-white text-2xl">&lsaquo;</a>
       ) : (
         <span class="text-2xl invisible">&lsaquo;</span>
       )}
       <span class="text-white/50 text-sm">{currentIndex + 1} / {allPhotos.length}</span>
       {next ? (
-        <a href={`/gallery/photo/${next.date}/${next.id}`} class="text-white/50 hover:text-white text-2xl">&rsaquo;</a>
+        <a href={`/en/gallery/photo/${next.date}/${next.id}`} class="text-white/50 hover:text-white text-2xl">&rsaquo;</a>
       ) : (
         <span class="text-2xl invisible">&rsaquo;</span>
       )}
@@ -79,13 +79,13 @@ const next = currentIndex < allPhotos.length - 1 ? allPhotos[currentIndex + 1] :
     <script is:inline define:vars={{ prev, next }}>
       document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowLeft' && prev) {
-          window.location.href = `/gallery/photo/${prev.date}/${prev.id}`;
+          window.location.href = `/en/gallery/photo/${prev.date}/${prev.id}`;
         }
         if (e.key === 'ArrowRight' && next) {
-          window.location.href = `/gallery/photo/${next.date}/${next.id}`;
+          window.location.href = `/en/gallery/photo/${next.date}/${next.id}`;
         }
         if (e.key === 'Escape') {
-          window.location.href = '/';
+          window.location.href = '/en/';
         }
       });
     </script>

@@ -25,6 +25,10 @@
     id: string;
   }
 
+  const locale = document.documentElement.lang === 'en' ? 'en' : 'it';
+  const photoBasePath = locale === 'en' ? '/en/gallery/photo' : '/gallery/photo';
+  const homePath = locale === 'en' ? '/en/' : '/';
+
   const lightbox = document.getElementById('lightbox')!;
   const lbImg = document.getElementById('lb-img') as HTMLImageElement;
   const lbClose = document.getElementById('lb-close')!;
@@ -53,7 +57,7 @@
     lbCounter.textContent = `${currentIndex + 1} / ${allPhotos.length}`;
     lbPrev.style.visibility = currentIndex > 0 ? 'visible' : 'hidden';
     lbNext.style.visibility = currentIndex < allPhotos.length - 1 ? 'visible' : 'hidden';
-    history.replaceState({ lightbox: true, index: currentIndex }, '', `/gallery/photo/${photo.date}/${photo.id}`);
+    history.replaceState({ lightbox: true, index: currentIndex }, '', `${photoBasePath}/${photo.date}/${photo.id}`);
   }
 
   function openLightbox(index: number) {
@@ -64,7 +68,7 @@
     lightbox.classList.add('flex');
     document.body.style.overflow = 'hidden';
     const photo = allPhotos[index];
-    history.pushState({ lightbox: true, index }, '', `/gallery/photo/${photo.date}/${photo.id}`);
+    history.pushState({ lightbox: true, index }, '', `${photoBasePath}/${photo.date}/${photo.id}`);
     showPhoto(index);
   }
 
@@ -74,7 +78,7 @@
     lightbox.classList.add('hidden');
     lightbox.classList.remove('flex');
     document.body.style.overflow = '';
-    history.pushState(null, '', '/');
+    history.pushState(null, '', homePath);
     window.scrollTo(0, savedScrollY);
   }
 
