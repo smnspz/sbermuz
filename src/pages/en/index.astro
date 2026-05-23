@@ -13,7 +13,7 @@ const years = [...new Set(events.map((e) => e.rawDate.slice(0, 4)))].sort().reve
 <BaseLayout locale={locale}>
 	<Header locale={locale} />
 	<main>
-		<Hero title={hero.title} description={hero.description} image={hero.image} date={hero.date} dateEn={hero.dateEn} rawDate={hero.rawDate} address={hero.address} price={hero.price} eventSlug={hero.slug} locale={locale} />
+		<Hero title={hero.title} description={hero.description} image={hero.image} imageWidth={hero.imageWidth} imageHeight={hero.imageHeight} date={hero.date} dateEn={hero.dateEn} rawDate={hero.rawDate} address={hero.address} price={hero.price} eventSlug={hero.slug} locale={locale} />
 		<InfoBar locale={locale} />
 
 		<div id="gallery"></div>
@@ -25,7 +25,7 @@ const years = [...new Set(events.map((e) => e.rawDate.slice(0, 4)))].sort().reve
 			))}
 		</nav>
 		{events.map((event) => (
-			<EventCarousel title={event.title} date={event.date} dateEn={event.dateEn} rawDate={event.rawDate} flyer={event.flyer} photos={event.photos} year={event.rawDate.slice(0, 4)} locale={locale} />
+			<EventCarousel title={event.title} date={event.date} dateEn={event.dateEn} rawDate={event.rawDate} flyer={event.flyer} flyerWidth={event.flyerWidth} flyerHeight={event.flyerHeight} photos={event.photos} year={event.rawDate.slice(0, 4)} locale={locale} />
 		))}
 	</main>
 	<Footer locale={locale} />

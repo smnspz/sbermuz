@@ -10,6 +10,10 @@ export interface Hero {
   description: string;
   /** Full Directus asset URL for the hero image (event flyer). */
   image: string;
+  /** Hero image width in pixels. */
+  imageWidth: number;
+  /** Hero image height in pixels. */
+  imageHeight: number;
   /** Italian-formatted date with time. */
   date: string;
   /** English-formatted date with time. */
@@ -33,7 +37,7 @@ export interface Hero {
  */
 export async function getHero(): Promise<Hero> {
   const res = await fetch(
-    `${DIRECTUS_URL}/items/hero?fields=event.*,event.address_id.full_address`,
+    `${DIRECTUS_URL}/items/hero?fields=event.*,event.address_id.full_address,event.flyer.width,event.flyer.height,event.flyer.id`,
   );
   const json = await res.json();
   const event = json.data.event;
@@ -41,7 +45,9 @@ export async function getHero(): Promise<Hero> {
   return {
     title: event.name,
     description: event.description ?? '',
-    image: `${DIRECTUS_URL}/assets/${event.flyer}`,
+    image: `${DIRECTUS_URL}/assets/${event.flyer.id}`,
+    imageWidth: event.flyer.width,
+    imageHeight: event.flyer.height,
     date: formatDate(event.date, 'it'),
     dateEn: formatDate(event.date, 'en'),
     rawDate: event.date,

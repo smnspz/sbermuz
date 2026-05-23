@@ -9,31 +9,47 @@ interface Props {
   dateEn: string;
   rawDate: string;
   flyer: string;
-  photos?: string[];
+  flyerWidth: number;
+  flyerHeight: number;
+  photos?: { src: string; width: number; height: number }[];
   year: string;
   locale?: Locale;
 }
 
-const { title, date, dateEn, rawDate, flyer, photos, year, locale = 'it' } = Astro.props;
+const { title, date, dateEn, rawDate, flyer, flyerWidth, flyerHeight, photos, year, locale = 'it' } = Astro.props;
 const displayDate = locale === 'en' ? dateEn : date;
+
+const FLYER_WIDTH = 500;
+const flyerSizedHeight = Math.round(flyerHeight * FLYER_WIDTH / flyerWidth);
+const flyerSrc = `${flyer}?width=${FLYER_WIDTH}&format=webp&withoutEnlargement=true`;
+
+const PHOTO_WIDTH = 400;
 
 interface PhotoItem {
   src: string;
+  originalSrc: string;
   id: string;
+  width: number;
+  height: number;
 }
 
+// Split pictures in two columns
 const leftPhotos: PhotoItem[] = [];
 const rightPhotos: PhotoItem[] = [];
 
 if (photos) {
   photos.forEach((p, i) => {
-    const item = { src: p, id: String(i + 1) };
+    const sizedHeight = Math.round(p.height * PHOTO_WIDTH / p.width);
+    const item = { src: `${p.src}?width=${PHOTO_WIDTH}&format=webp&withoutEnlargement=true`, originalSrc: p.src, id: String(i + 1), width: PHOTO_WIDTH, height: sizedHeight };
     if (i % 2 === 0) leftPhotos.push(item);
     else rightPhotos.push(item);
   });
 }
 
-const allPhotos = photos ? photos.map((p, i) => ({ src: p, id: String(i + 1) })) : [];
+const allPhotos = photos ? photos.map((p, i) => {
+  const sizedHeight = Math.round(p.height * PHOTO_WIDTH / p.width);
+  return { src: `${p.src}?width=${PHOTO_WIDTH}&format=webp&withoutEnlargement=true`, originalSrc: p.src, id: String(i + 1), width: PHOTO_WIDTH, height: sizedHeight };
+}) : [];
 const hasPhotos = photos && photos.length > 0;
 const photoDate = hasPhotos ? getPhotoDate(rawDate) : '';
 ---
@@ -45,7 +61,7 @@ const photoDate = hasPhotos ? getPhotoDate(rawDate) : '';
     <div class="md:sticky md:top-[calc(var(--header-bottom)+1rem)] md:self-start text-center">
       <h2 class="text-3xl font-bold font-display mt-8">{title}</h2>
       <p class="text-sm opacity-60 mt-1 mb-6">{displayDate}</p>
-      <img src={flyer} alt="" class="w-full block rounded-lg cursor-pointer" data-flyer-src={flyer} />
+      <img src={flyerSrc} alt="" width={FLYER_WIDTH} height={flyerSizedHeight} class="w-full block rounded-lg cursor-pointer" data-flyer-src={flyer} />
     </div>
 
     <PhotoColumn photos={rightPhotos} date={photoDate} class="hidden md:flex flex-col gap-40 mt-12" />
@@ -56,7 +72,7 @@ const photoDate = hasPhotos ? getPhotoDate(rawDate) : '';
 ) : (
   <section data-year={year} class="relative grid grid-cols-1 md:grid-cols-2 gap-12 px-6 py-12 md:min-h-[calc(100vh-5rem)] md:pb-20 max-w-5xl mx-auto items-center">
     <div class="flex justify-center">
-      <img src={flyer} alt="" class="w-full max-w-sm block rounded-lg cursor-pointer" data-flyer-src={flyer} />
+      <img src={flyerSrc} alt="" width={FLYER_WIDTH} height={flyerSizedHeight} class="w-full max-w-sm block rounded-lg cursor-pointer" data-flyer-src={flyer} />
     </div>
     <div class="flex flex-col gap-4">
       <h2 class="text-3xl font-bold font-display">{title}</h2>

@@ -8,20 +8,22 @@ const locale = 'it' as const;
 
 export async function getStaticPaths() {
   const events = await getEvents();
-  const paths: { params: { date: string; id: string }; props: { src: string; allPhotos: { src: string; date: string; id: string }[] } }[] = [];
+  const paths: { params: { date: string; id: string }; props: { src: string; width: number; height: number; allPhotos: { src: string; date: string; id: string }[] } }[] = [];
 
   for (const event of events) {
     if (!event.photos) continue;
     const photoDate = getPhotoDate(event.rawDate);
     const eventPhotos = event.photos.map((p, i) => ({
-      src: p,
+      src: p.src,
       date: photoDate,
       id: String(i + 1),
     }));
-    for (const photo of eventPhotos) {
+    for (let j = 0; j < eventPhotos.length; j++) {
+      const photo = eventPhotos[j];
+      const p = event.photos![j];
       paths.push({
         params: { date: photo.date, id: photo.id },
-        props: { src: photo.src, allPhotos: eventPhotos },
+        props: { src: photo.src, width: p.width, height: p.height, allPhotos: eventPhotos },
       });
     }
   }
@@ -29,7 +31,7 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { src, allPhotos } = Astro.props;
+const { src, width, height, allPhotos } = Astro.props;
 const { date, id } = Astro.params;
 
 const currentIndex = allPhotos.findIndex((p: { id: string }) => p.id === id);
@@ -52,7 +54,7 @@ const next = currentIndex < allPhotos.length - 1 ? allPhotos[currentIndex + 1] :
         <span class="hidden md:block text-4xl invisible shrink-0">&lsaquo;</span>
       )}
 
-      <img src={src} alt="" class="max-h-[calc(100dvh-7rem)] md:max-h-[calc(100dvh-4rem)] max-w-full object-contain" />
+      <img src={src} alt="" width={width} height={height} class="max-h-[calc(100dvh-7rem)] md:max-h-[calc(100dvh-4rem)] max-w-full object-contain" />
 
       {next ? (
         <a href={`/gallery/photo/${next.date}/${next.id}`} class="hidden md:block text-white/50 hover:text-white text-4xl shrink-0">&rsaquo;</a>

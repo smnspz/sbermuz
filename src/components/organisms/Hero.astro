@@ -5,6 +5,8 @@ interface Props {
   title: string;
   description: string;
   image: string;
+  imageWidth: number;
+  imageHeight: number;
   date: string;
   dateEn: string;
   rawDate: string;
@@ -17,7 +19,11 @@ interface Props {
 import { Button } from '../atoms';
 import { generateIcs } from '../../lib/calendar';
 
-const { title, description, image, date, dateEn, rawDate, address, price, eventSlug, locale = 'it' } = Astro.props;
+const { title, description, image, imageWidth, imageHeight, date, dateEn, rawDate, address, price, eventSlug, locale = 'it' } = Astro.props;
+
+const HERO_WIDTH = 700;
+const heroHeight = Math.round(imageHeight * HERO_WIDTH / imageWidth);
+const heroSrc = `${image}?width=${HERO_WIDTH}&format=webp&withoutEnlargement=true`;
 
 const icsContent = generateIcs({ title, description, date: rawDate, address });
 const displayDate = locale === 'en' ? dateEn : date;
@@ -28,7 +34,7 @@ const eventHref = locale === 'en' ? `/en/event/${eventSlug}` : `/event/${eventSl
   <div class="flex-1 flex items-center">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center w-full">
       <div class="flex justify-center hero-fade" style="--delay: 0ms">
-        <img src={image} alt="" class="w-full max-w-md block rounded-lg" />
+        <img src={heroSrc} alt="" width={HERO_WIDTH} height={heroHeight} class="w-full max-w-[350px] block rounded-lg" />
       </div>
       <div class="flex flex-col gap-4">
         <!-- Badge -->

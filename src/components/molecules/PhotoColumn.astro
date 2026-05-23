@@ -3,7 +3,10 @@ import { EventPhoto } from '../atoms';
 
 interface PhotoItem {
   src: string;
+  originalSrc: string;
   id: string;
+  width: number;
+  height: number;
 }
 
 interface Props {
@@ -17,6 +20,6 @@ const { photos, date, class: className } = Astro.props;
 
 <div class={className}>
   {photos.map((photo) => (
-    <EventPhoto src={photo.src} date={date} id={photo.id} />
+    <EventPhoto src={photo.src} originalSrc={photo.originalSrc} date={date} id={photo.id} width={photo.width} height={photo.height} />
   ))}
 </div>
