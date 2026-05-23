@@ -11,6 +11,23 @@ html {
   scroll-behavior: smooth;
 }
 
+@keyframes hero-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: var(--end-opacity, 1);
+    transform: translateY(0);
+  }
+}
+
+.hero-fade {
+  opacity: 0;
+  animation: hero-drop 0.4s ease-out forwards;
+  animation-delay: var(--delay, 0ms);
+}
+
 .prose h1 {
   font-family: var(--font-display);
   font-size: 2rem;

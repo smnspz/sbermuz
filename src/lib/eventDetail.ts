@@ -78,7 +78,7 @@ export async function getEventBySlug(slug: string): Promise<EventDetail | null> 
 
   // Fetch full detail with artists
   const res = await fetch(
-    `${DIRECTUS_URL}/items/event/${match.id}?fields=*,address_id.*,artists.artist_id.*`,
+    `${DIRECTUS_URL}/items/event/${match.id}?fields=*,address_id.full_address,address_id.coordinates,artists.artist_id.*`,
   );
   const json = await res.json();
   const item = json.data;
