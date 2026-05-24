@@ -38,19 +38,6 @@ export function slugify(name: string): string {
     .replace(/[^a-z0-9-]/g, '');
 }
 
-/** Fetches a single genre by ID. */
-async function fetchGenre(id: number): Promise<string> {
-  const res = await fetch(`${DIRECTUS_URL}/items/genre/${id}`);
-  const json = await res.json();
-  return json.data.name;
-}
-
-/** Resolves an array of genre IDs to genre names. */
-async function resolveGenres(ids: number[]): Promise<string[]> {
-  if (!ids || ids.length === 0) return [];
-  return Promise.all(ids.map(fetchGenre));
-}
-
 /**
  * Returns all events as `{ slug, eventId }` pairs for static path generation.
  */
@@ -78,26 +65,26 @@ export async function getEventBySlug(slug: string): Promise<EventDetail | null> 
 
   // Fetch full detail with artists
   const res = await fetch(
-    `${DIRECTUS_URL}/items/event/${match.id}?fields=*,address_id.full_address,address_id.coordinates,artists.artist_id.*`,
+    `${DIRECTUS_URL}/items/event/${match.id}?fields=*,address_id.full_address,address_id.coordinates,artists.artist_id.*,artists.artist_id.genres.genre_id.name`,
   );
   const json = await res.json();
   const item = json.data;
 
-  // Resolve artists with genres
-  const artists: DetailArtist[] = await Promise.all(
-    (item.artists ?? []).map(async (rel: any) => {
-      const a = rel.artist_id;
-      const genres = await resolveGenres(a.genres ?? []);
-      return {
-        name: a.name,
-        description: a.description ?? '',
-        photo: a.photo ? `${DIRECTUS_URL}/assets/${a.photo}` : '',
-        genres,
-        spotifyUrl: a.spotify_url ?? undefined,
-        bandcampUrl: a.bandcamp_url ?? undefined,
-      };
-    }),
-  );
+  // Resolve artists with genres (expanded via the junction relation)
+  const artists: DetailArtist[] = (item.artists ?? []).map((rel: any) => {
+    const a = rel.artist_id;
+    const genres = (a.genres ?? [])
+      .map((g: any) => g.genre_id?.name)
+      .filter(Boolean);
+    return {
+      name: a.name,
+      description: a.description ?? '',
+      photo: a.photo ? `${DIRECTUS_URL}/assets/${a.photo}` : '',
+      genres,
+      spotifyUrl: a.spotify_url ?? undefined,
+      bandcampUrl: a.bandcamp_url ?? undefined,
+    };
+  });
 
   // GeoJSON Point comes as [longitude, latitude] — flip to [lat, lon]
   const coordinates: [number, number] | undefined = item.address_id?.coordinates?.coordinates
