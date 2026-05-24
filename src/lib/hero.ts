@@ -30,6 +30,11 @@ export interface Hero {
   eventId: number;
 }
 
+function formatPrice(value: string): string {
+  const n = parseFloat(value);
+  return n % 1 === 0 ? `${n}€` : `${n.toFixed(2)}€`;
+}
+
 /**
  * Fetches the hero section data from the Directus CMS.
  * All hero data comes from the linked event.
@@ -52,7 +57,7 @@ export async function getHero(): Promise<Hero> {
     dateEn: formatDate(event.date, 'en'),
     rawDate: event.date,
     address: event.address_id?.full_address ?? undefined,
-    price: event.price ?? undefined,
+    price: event.price != null ? formatPrice(event.price) : undefined,
     slug: slugify(event.name),
     eventId: event.id,
   };
