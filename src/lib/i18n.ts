@@ -19,6 +19,7 @@ const translations = {
   'gallery.title': { it: 'Archivio eventi', en: 'Event archive' },
   'gallery.all': { it: 'Tutti', en: 'All' },
   'event.back': { it: 'torna alla home', en: 'back to home' },
+  'event.addCalendar': { it: 'Aggiungi al calendario', en: 'Add to calendar' },
   'event.where': { it: 'Dove', en: 'Where' },
   'event.mapTitle': { it: 'Mappa evento', en: 'Event map' },
   'event.tocTitle': { it: 'In questa pagina', en: 'On this page' },

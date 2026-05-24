@@ -23,10 +23,12 @@ export interface EventDetail {
   title: string;
   date: string;
   dateEn: string;
+  rawDate: string;
   description: string;
   flyer: string;
   /** [latitude, longitude] if the event has coordinates. */
   coordinates?: [number, number];
+  address?: string;
   artists: DetailArtist[];
 }
 
@@ -105,9 +107,11 @@ export async function getEventBySlug(slug: string): Promise<EventDetail | null> 
       item.date.slice(8, 10) +
       '/' +
       item.date.slice(0, 4),
+    rawDate: item.date,
     description: item.description ? await marked.parse(item.description) : '',
     flyer: `${DIRECTUS_URL}/assets/${item.flyer}`,
     coordinates,
+    address: item.address_id?.full_address ?? undefined,
     artists,
   };
 }
