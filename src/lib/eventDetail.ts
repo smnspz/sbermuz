@@ -17,6 +17,7 @@ export interface DetailArtist {
   genres: string[];
   spotifyUrl?: string;
   bandcampUrl?: string;
+  instagramUrl?: string;
 }
 
 /** Full event detail for the detail page. */
@@ -96,6 +97,7 @@ export async function getEventBySlug(slug: string, locale: Locale = 'it'): Promi
       genres,
       spotifyUrl: a.spotify_url ?? undefined,
       bandcampUrl: a.bandcamp_url ?? undefined,
+      instagramUrl: a.instagram_url ?? undefined,
     };
   });
 

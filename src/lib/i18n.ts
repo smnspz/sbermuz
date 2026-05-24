@@ -21,6 +21,8 @@ const translations = {
   'event.back': { it: 'torna alla home', en: 'back to home' },
   'event.addCalendar': { it: 'Aggiungi al calendario', en: 'Add to calendar' },
   'event.where': { it: 'Dove', en: 'Where' },
+  'event.openMaps': { it: 'Apri in mappe', en: 'Open in maps' },
+  'event.openGoogleMaps': { it: 'Apri in Google Maps', en: 'Open in Google Maps' },
   'event.mapTitle': { it: 'Mappa evento', en: 'Event map' },
   'event.tocTitle': { it: 'In questa pagina', en: 'On this page' },
   'event.tocEntry': { it: 'Ingresso', en: 'Entry' },

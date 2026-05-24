@@ -114,6 +114,11 @@ const tocEntries = [
                             Bandcamp
                           </a>
                         )}
+                        {artist.instagramUrl && (
+                          <a href={artist.instagramUrl} target="_blank" rel="noopener noreferrer" class="text-sm hover:underline underline-offset-4">
+                            Instagram
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -136,6 +141,23 @@ const tocEntries = [
                   src={`https://www.openstreetmap.org/export/embed.html?bbox=${event.coordinates[1] - 0.002}%2C${event.coordinates[0] - 0.001}%2C${event.coordinates[1] + 0.002}%2C${event.coordinates[0] + 0.001}&layer=mapnik&marker=${event.coordinates[0]}%2C${event.coordinates[1]}`}
                 />
               </div>
+              <Button
+                href={`https://www.google.com/maps/search/?api=1&query=${event.coordinates[0]},${event.coordinates[1]}`}
+                class="mt-4 w-full justify-center md:hidden"
+              >
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="10" r="3" /><path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 7 8 11.7z" />
+                </svg>
+                {t('event.openMaps', locale)}
+              </Button>
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${event.coordinates[0]},${event.coordinates[1]}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hidden md:inline-block mt-4 text-sm hover:underline underline-offset-4"
+              >
+                {t('event.openGoogleMaps', locale)}
+              </a>
             </section>
           )}
         </div>
