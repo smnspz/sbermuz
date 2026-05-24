@@ -110,20 +110,14 @@ export async function getEventBySlug(slug: string, locale: Locale = 'it'): Promi
   const rawDescription = eventTr?.description ?? item.description;
   const priceFull = eventTr?.price_full ?? item.price_full ?? undefined;
 
+  const dateObj = new Date(item.date);
+  const dateFmt = (loc: string) =>
+    new Intl.DateTimeFormat(loc, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(dateObj);
+
   return {
     title,
-    date:
-      item.date.slice(8, 10) +
-      '/' +
-      item.date.slice(5, 7) +
-      '/' +
-      item.date.slice(0, 4),
-    dateEn:
-      item.date.slice(5, 7) +
-      '/' +
-      item.date.slice(8, 10) +
-      '/' +
-      item.date.slice(0, 4),
+    date: dateFmt('it-IT'),
+    dateEn: dateFmt('en-GB'),
     rawDate: item.date,
     description: rawDescription ? await marked.parse(rawDescription) : '',
     flyer: `${DIRECTUS_URL}/assets/${item.flyer}`,
