@@ -21,6 +21,8 @@ const translations = {
   'event.back': { it: 'torna alla home', en: 'back to home' },
   'event.where': { it: 'Dove', en: 'Where' },
   'event.mapTitle': { it: 'Mappa evento', en: 'Event map' },
+  'event.tocTitle': { it: 'In questa pagina', en: 'On this page' },
+  'event.tocEntry': { it: 'Ingresso', en: 'Entry' },
   'photo.back': { it: 'torna al sito', en: 'back to site' },
   'footer.about': { it: 'Chi siamo', en: 'About us' },
   'footer.archive': { it: 'Archivio', en: 'Archive' },
