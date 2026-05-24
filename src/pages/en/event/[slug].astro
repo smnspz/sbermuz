@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-const event = await getEventBySlug(slug!);
+const event = await getEventBySlug(slug!, locale);
 
 if (!event) {
   return Astro.redirect('/en/');
@@ -65,6 +65,13 @@ const tocEntries = [
           {event.description && (
             <section id="ingresso" class="mt-10">
               <div class="text-lg leading-relaxed prose" set:html={event.description} />
+            </section>
+          )}
+
+          {event.priceFull && (
+            <section class="mt-6">
+              <h2 class="text-3xl font-bold font-display mb-6">{t('event.tocEntry', locale)}</h2>
+              <p class="text-lg opacity-80">{event.priceFull}</p>
             </section>
           )}
 

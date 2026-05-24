@@ -1,6 +1,7 @@
 import { marked } from 'marked';
 
 import { DIRECTUS_URL } from './constants';
+import type { Locale } from './i18n';
 
 /** A resolved genre. */
 export interface Genre {
@@ -29,6 +30,7 @@ export interface EventDetail {
   /** [latitude, longitude] if the event has coordinates. */
   coordinates?: [number, number];
   address?: string;
+  priceFull?: string;
   artists: DetailArtist[];
 }
 
@@ -56,7 +58,7 @@ export async function getAllEventSlugs(): Promise<{ slug: string; eventId: numbe
  * Fetches full event detail by slug.
  * Finds the event by slugified name, then fetches with artist relations and resolves genres.
  */
-export async function getEventBySlug(slug: string): Promise<EventDetail | null> {
+export async function getEventBySlug(slug: string, locale: Locale = 'it'): Promise<EventDetail | null> {
   // Fetch all events to find the one matching the slug
   const listRes = await fetch(`${DIRECTUS_URL}/items/event?fields=id,name`);
   const listJson = await listRes.json();
@@ -65,22 +67,31 @@ export async function getEventBySlug(slug: string): Promise<EventDetail | null> 
   );
   if (!match) return null;
 
-  // Fetch full detail with artists
+  // Fetch full detail with artists and translations
   const res = await fetch(
-    `${DIRECTUS_URL}/items/event/${match.id}?fields=*,address_id.full_address,address_id.coordinates,artists.artist_id.*,artists.artist_id.genres.genre_id.name`,
+    `${DIRECTUS_URL}/items/event/${match.id}?fields=*,translations.*,address_id.full_address,address_id.coordinates,artists.artist_id.*,artists.artist_id.translations.*,artists.artist_id.genres.genre_id.name`,
   );
   const json = await res.json();
   const item = json.data;
 
+  // Resolve English translations if requested
+  const langCode = locale === 'en' ? 'en-US' : null;
+  const eventTr = langCode
+    ? (item.translations ?? []).find((t: any) => t.languages_code === langCode)
+    : null;
+
   // Resolve artists with genres (expanded via the junction relation)
   const artists: DetailArtist[] = (item.artists ?? []).map((rel: any) => {
     const a = rel.artist_id;
+    const artistTr = langCode
+      ? (a.translations ?? []).find((t: any) => t.languages_code === langCode)
+      : null;
     const genres = (a.genres ?? [])
       .map((g: any) => g.genre_id?.name)
       .filter(Boolean);
     return {
       name: a.name,
-      description: a.description ?? '',
+      description: artistTr?.description ?? a.description ?? '',
       photo: a.photo ? `${DIRECTUS_URL}/assets/${a.photo}` : '',
       genres,
       spotifyUrl: a.spotify_url ?? undefined,
@@ -93,8 +104,12 @@ export async function getEventBySlug(slug: string): Promise<EventDetail | null> 
     ? [item.address_id.coordinates.coordinates[1], item.address_id.coordinates.coordinates[0]]
     : undefined;
 
+  const title = eventTr?.name ?? item.name;
+  const rawDescription = eventTr?.description ?? item.description;
+  const priceFull = eventTr?.price_full ?? item.price_full ?? undefined;
+
   return {
-    title: item.name,
+    title,
     date:
       item.date.slice(8, 10) +
       '/' +
@@ -108,10 +123,11 @@ export async function getEventBySlug(slug: string): Promise<EventDetail | null> 
       '/' +
       item.date.slice(0, 4),
     rawDate: item.date,
-    description: item.description ? await marked.parse(item.description) : '',
+    description: rawDescription ? await marked.parse(rawDescription) : '',
     flyer: `${DIRECTUS_URL}/assets/${item.flyer}`,
     coordinates,
     address: item.address_id?.full_address ?? undefined,
+    priceFull,
     artists,
   };
 }
