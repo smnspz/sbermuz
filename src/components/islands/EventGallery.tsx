@@ -73,7 +73,10 @@ function LazyPhoto({ photo, date }: { photo: PhotoItem; date: string }) {
           alt=""
           width={photo.width}
           height={photo.height}
-          class="w-full block rounded-lg grayscale hover:grayscale-0 transition duration-300 cursor-pointer"
+          class="w-full block rounded-lg grayscale hover:grayscale-0 transition duration-300 cursor-pointer select-none"
+          style={{ WebkitTouchCallout: 'none' }}
+          draggable={false}
+          onContextMenu={(e) => e.preventDefault()}
           data-photo-src={photo.originalSrc}
           data-photo-date={date}
           data-photo-id={photo.id}
@@ -122,7 +125,10 @@ export default function EventGallery({
             alt=""
             width={flyerWidth}
             height={flyerHeight}
-            class="w-full max-w-sm block rounded-lg cursor-pointer"
+            class="w-full max-w-sm block rounded-lg cursor-pointer select-none"
+            style={{ WebkitTouchCallout: 'none' }}
+            draggable={false}
+            onContextMenu={(e) => e.preventDefault()}
             data-flyer-src={flyerOriginal}
           />
         </div>
@@ -146,7 +152,10 @@ export default function EventGallery({
           alt=""
           width={flyerWidth}
           height={flyerHeight}
-          class="w-full block rounded-lg cursor-pointer"
+          class="w-full block rounded-lg cursor-pointer select-none"
+          style={{ WebkitTouchCallout: 'none' }}
+          draggable={false}
+          onContextMenu={(e) => e.preventDefault()}
           data-flyer-src={flyerOriginal}
         />
       </div>
