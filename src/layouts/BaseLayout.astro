@@ -5,10 +5,13 @@ import '../styles/global.css';
 interface Props {
   locale?: Locale;
   title?: string;
+  description?: string;
+  image?: string;
   bodyClass?: string;
 }
 
-const { locale = 'it', title = 'Collettivo Sbermuz', bodyClass = 'bg-bg' } = Astro.props;
+const { locale = 'it', title = 'Collettivo Sbermuz', description, image, bodyClass = 'bg-bg' } = Astro.props;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://sbermuz.club');
 ---
 
 <html lang={locale}>
@@ -16,6 +19,17 @@ const { locale = 'it', title = 'Collettivo Sbermuz', bodyClass = 'bg-bg' } = Ast
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
+		<link rel="canonical" href={canonicalUrl.href} />
+		{description && <meta name="description" content={description} />}
+		<meta property="og:title" content={title} />
+		{description && <meta property="og:description" content={description} />}
+		{image && <meta property="og:image" content={image} />}
+		<meta property="og:url" content={canonicalUrl.href} />
+		<meta property="og:type" content="website" />
+		<meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
+		<meta name="twitter:title" content={title} />
+		{description && <meta name="twitter:description" content={description} />}
+		{image && <meta name="twitter:image" content={image} />}
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&family=Unbounded:wght@400;700&display=swap" rel="stylesheet" />

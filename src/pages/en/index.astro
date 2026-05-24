@@ -10,7 +10,7 @@ const [hero, events] = await Promise.all([getHero(), getEvents()]);
 const years = [...new Set(events.map((e) => e.rawDate.slice(0, 4)))].sort().reverse();
 ---
 
-<BaseLayout locale={locale}>
+<BaseLayout locale={locale} description={t('meta.homeDescription', locale)} image={hero.image}>
 	<Header locale={locale} />
 	<main>
 		<Hero title={hero.title} description={hero.description} image={hero.image} imageWidth={hero.imageWidth} imageHeight={hero.imageHeight} date={hero.date} dateEn={hero.dateEn} rawDate={hero.rawDate} address={hero.address} price={hero.price} eventSlug={hero.slug} locale={locale} />

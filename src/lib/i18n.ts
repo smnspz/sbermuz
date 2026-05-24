@@ -2,6 +2,7 @@ export type Locale = 'it' | 'en';
 export const defaultLocale: Locale = 'it';
 
 const translations = {
+  'meta.homeDescription': { it: 'Collettivo musicale genovese. Organizziamo concerti dal 2024.', en: 'Genoese music collective. Organizing concerts since 2024.' },
   'nav.about': { it: 'chi siamo', en: 'about us' },
   'nav.archive': { it: 'archivio', en: 'archive' },
   'nav.listen': { it: 'ascolta', en: 'listen' },

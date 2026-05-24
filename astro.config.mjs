@@ -2,10 +2,12 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import preact from '@astrojs/preact';
+import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [preact()],
+  site: 'https://sbermuz.club',
+  integrations: [preact(), sitemap()],
   i18n: {
     locales: ['it', 'en'],
     defaultLocale: 'it',

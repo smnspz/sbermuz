@@ -24,6 +24,10 @@ if (!event) {
 
 const icsContent = generateIcs({ title: event.title, description: '', date: event.rawDate, address: event.address });
 
+const metaDescription = event.description
+  ? event.description.replace(/<[^>]+>/g, '').slice(0, 160).trim()
+  : undefined;
+
 const tocEntries = [
   ...(event.description ? [{ id: 'ingresso', label: t('event.tocEntry', locale) }] : []),
   ...(event.artists.length > 0
@@ -37,7 +41,7 @@ const tocEntries = [
 ];
 ---
 
-<BaseLayout locale={locale} title={`${event.title} - Collettivo Sbermuz`}>
+<BaseLayout locale={locale} title={`${event.title} - Collettivo Sbermuz`} description={metaDescription} image={event.flyer}>
     <Header locale={locale} />
     <main>
       <!-- Banner -->
