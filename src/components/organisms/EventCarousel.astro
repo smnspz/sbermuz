@@ -21,7 +21,7 @@ const displayDate = locale === 'en' ? dateEn : date;
 
 const FLYER_WIDTH = 500;
 const flyerSizedHeight = Math.round(flyerHeight * FLYER_WIDTH / flyerWidth);
-const flyerSrc = `${flyer}?width=${FLYER_WIDTH}&format=webp&withoutEnlargement=true`;
+const flyerSrc = `${flyer}?width=${FLYER_WIDTH}&format=webp&quality=60&withoutEnlargement=true`;
 
 const PHOTO_WIDTH = 400;
 
@@ -40,7 +40,7 @@ const rightPhotos: PhotoItem[] = [];
 if (photos) {
   photos.forEach((p, i) => {
     const sizedHeight = Math.round(p.height * PHOTO_WIDTH / p.width);
-    const item = { src: `${p.src}?width=${PHOTO_WIDTH}&format=webp&withoutEnlargement=true`, originalSrc: p.src, id: String(i + 1), width: PHOTO_WIDTH, height: sizedHeight };
+    const item = { src: `${p.src}?width=${PHOTO_WIDTH}&format=webp&quality=60&withoutEnlargement=true`, originalSrc: p.src, id: String(i + 1), width: PHOTO_WIDTH, height: sizedHeight };
     if (i % 2 === 0) leftPhotos.push(item);
     else rightPhotos.push(item);
   });
@@ -48,7 +48,7 @@ if (photos) {
 
 const allPhotos = photos ? photos.map((p, i) => {
   const sizedHeight = Math.round(p.height * PHOTO_WIDTH / p.width);
-  return { src: `${p.src}?width=${PHOTO_WIDTH}&format=webp&withoutEnlargement=true`, originalSrc: p.src, id: String(i + 1), width: PHOTO_WIDTH, height: sizedHeight };
+  return { src: `${p.src}?width=${PHOTO_WIDTH}&format=webp&quality=60&withoutEnlargement=true`, originalSrc: p.src, id: String(i + 1), width: PHOTO_WIDTH, height: sizedHeight };
 }) : [];
 const hasPhotos = photos && photos.length > 0;
 const photoDate = hasPhotos ? getPhotoDate(rawDate) : '';

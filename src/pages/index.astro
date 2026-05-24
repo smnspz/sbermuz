@@ -17,7 +17,7 @@ const FLYER_WIDTH = 500;
 const galleryEvents = events.map((event) => {
   const flyerSizedHeight = Math.round(event.flyerHeight * FLYER_WIDTH / event.flyerWidth);
   const photos = (event.photos ?? []).map((p, i) => ({
-    src: `${p.src}?width=${PHOTO_WIDTH}&format=webp&withoutEnlargement=true`,
+    src: `${p.src}?width=${PHOTO_WIDTH}&format=webp&quality=60&withoutEnlargement=true`,
     originalSrc: p.src,
     id: String(i + 1),
     width: PHOTO_WIDTH,
@@ -27,7 +27,7 @@ const galleryEvents = events.map((event) => {
   return {
     title: event.title,
     displayDate: event.date,
-    flyerSrc: `${event.flyer}?width=${FLYER_WIDTH}&format=webp&withoutEnlargement=true`,
+    flyerSrc: `${event.flyer}?width=${FLYER_WIDTH}&format=webp&quality=60&withoutEnlargement=true`,
     flyerOriginal: event.flyer,
     flyerWidth: FLYER_WIDTH,
     flyerHeight: flyerSizedHeight,
