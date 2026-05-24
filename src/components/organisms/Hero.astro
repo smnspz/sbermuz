@@ -23,7 +23,7 @@ const { title, description, image, imageWidth, imageHeight, date, dateEn, rawDat
 
 const HERO_WIDTH = 700;
 const heroHeight = Math.round(imageHeight * HERO_WIDTH / imageWidth);
-const heroSrc = `${image}?width=${HERO_WIDTH}&format=webp&withoutEnlargement=true`;
+const heroSrc = `${image}?width=${HERO_WIDTH}&format=webp&quality=60&withoutEnlargement=true`;
 
 const icsContent = generateIcs({ title, description, date: rawDate, address });
 const displayDate = locale === 'en' ? dateEn : date;
