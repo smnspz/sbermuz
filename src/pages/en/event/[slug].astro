@@ -47,9 +47,10 @@ const tocEntries = [
       <!-- Banner -->
       <section class="relative w-full h-[60vh] min-h-100 overflow-hidden">
         <img
-          src={event.flyer}
+          src={`${event.flyer}?format=webp&withoutEnlargement=true`}
           alt={event.title}
           class="absolute inset-0 w-full h-full object-cover"
+          fetchpriority="high"
         />
         <div class="absolute inset-0 bg-black/50"></div>
         <div class="absolute inset-0 flex flex-col items-center justify-end pb-12 px-6 text-white text-center">
@@ -89,9 +90,10 @@ const tocEntries = [
                   <div id={slugify(artist.name)} class="flex flex-col md:flex-row gap-6 items-start">
                     {artist.photo && (
                       <img
-                        src={artist.photo}
+                        src={`${artist.photo}?width=400&format=webp&withoutEnlargement=true`}
                         alt={artist.name}
                         class="w-full md:w-48 h-48 object-cover rounded-lg shrink-0"
+                        loading="lazy"
                       />
                     )}
                     <div class="flex flex-col gap-3">
