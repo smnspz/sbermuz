@@ -1,13 +1,42 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { Header, Hero, InfoBar, EventCarousel, Footer, Lightbox } from '../components';
+import { Header, Hero, InfoBar, Footer, Lightbox } from '../components';
+import EventGallery from '../components/islands/EventGallery';
 import { getEvents } from '../lib/events';
 import { getHero } from '../lib/hero';
+import { getPhotoDate } from '../lib/datetime';
 import { t } from '../lib/i18n';
 
 const locale = 'it' as const;
 const [hero, events] = await Promise.all([getHero(), getEvents()]);
 const years = [...new Set(events.map((e) => e.rawDate.slice(0, 4)))].sort().reverse();
+
+const PHOTO_WIDTH = 400;
+const FLYER_WIDTH = 500;
+
+const galleryEvents = events.map((event) => {
+  const flyerSizedHeight = Math.round(event.flyerHeight * FLYER_WIDTH / event.flyerWidth);
+  const photos = (event.photos ?? []).map((p, i) => ({
+    src: `${p.src}?width=${PHOTO_WIDTH}&format=webp&withoutEnlargement=true`,
+    originalSrc: p.src,
+    id: String(i + 1),
+    width: PHOTO_WIDTH,
+    height: Math.round(p.height * PHOTO_WIDTH / p.width),
+  }));
+  const hasPhotos = photos.length > 0;
+  return {
+    title: event.title,
+    displayDate: event.date,
+    flyerSrc: `${event.flyer}?width=${FLYER_WIDTH}&format=webp&withoutEnlargement=true`,
+    flyerOriginal: event.flyer,
+    flyerWidth: FLYER_WIDTH,
+    flyerHeight: flyerSizedHeight,
+    photos,
+    photoDate: hasPhotos ? getPhotoDate(event.rawDate) : '',
+    year: event.rawDate.slice(0, 4),
+    hasPhotos,
+  };
+});
 ---
 
 <BaseLayout locale={locale} description={t('meta.homeDescription', locale)} image={hero.image}>
@@ -24,8 +53,8 @@ const years = [...new Set(events.map((e) => e.rawDate.slice(0, 4)))].sort().reve
 				<button data-filter={y} class="gallery-filter border-2 border-black px-4 py-1 font-bold font-display shadow-[3px_3px_0_black] hover:shadow-none hover:translate-x-0.75 hover:translate-y-0.75 transition-all bg-white text-black">{y}</button>
 			))}
 		</nav>
-		{events.map((event) => (
-			<EventCarousel title={event.title} date={event.date} dateEn={event.dateEn} rawDate={event.rawDate} flyer={event.flyer} flyerWidth={event.flyerWidth} flyerHeight={event.flyerHeight} photos={event.photos} year={event.rawDate.slice(0, 4)} locale={locale} />
+		{galleryEvents.map((event) => (
+			<EventGallery client:visible {...event} />
 		))}
 	</main>
 	<Footer locale={locale} />
