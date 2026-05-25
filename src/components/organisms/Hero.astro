@@ -26,12 +26,12 @@ const HERO_MD = 289;
 const HERO_SM_2X = 526;
 const HERO_MD_2X = 578;
 const heroHeight = Math.round(imageHeight * HERO_MD / imageWidth);
-const heroSrc = `${image}?width=${HERO_MD}&format=webp&quality=60&withoutEnlargement=true`;
+const heroSrc = `${image}?width=${HERO_MD}&format=webp&quality=40&withoutEnlargement=true`;
 const heroSrcset = [
-  `${image}?width=${HERO_SM}&format=webp&quality=60&withoutEnlargement=true ${HERO_SM}w`,
-  `${image}?width=${HERO_MD}&format=webp&quality=60&withoutEnlargement=true ${HERO_MD}w`,
-  `${image}?width=${HERO_SM_2X}&format=webp&quality=60&withoutEnlargement=true ${HERO_SM_2X}w`,
-  `${image}?width=${HERO_MD_2X}&format=webp&quality=60&withoutEnlargement=true ${HERO_MD_2X}w`,
+  `${image}?width=${HERO_SM}&format=webp&quality=40&withoutEnlargement=true ${HERO_SM}w`,
+  `${image}?width=${HERO_MD}&format=webp&quality=40&withoutEnlargement=true ${HERO_MD}w`,
+  `${image}?width=${HERO_SM_2X}&format=webp&quality=40&withoutEnlargement=true ${HERO_SM_2X}w`,
+  `${image}?width=${HERO_MD_2X}&format=webp&quality=40&withoutEnlargement=true ${HERO_MD_2X}w`,
 ].join(', ');
 
 const icsContent = generateIcs({ title, description, date: rawDate, address });

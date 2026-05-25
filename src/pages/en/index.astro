@@ -19,8 +19,8 @@ const FLYER_WIDTH_2X = 662;
 const galleryEvents = events.map((event) => {
   const flyerSizedHeight = Math.round(event.flyerHeight * FLYER_WIDTH / event.flyerWidth);
   const photos = (event.photos ?? []).map((p, i) => ({
-    src: `${p.src}?width=${PHOTO_WIDTH}&format=webp&quality=60&withoutEnlargement=true`,
-    srcset: `${p.src}?width=${PHOTO_WIDTH}&format=webp&quality=60&withoutEnlargement=true ${PHOTO_WIDTH}w, ${p.src}?width=${PHOTO_WIDTH_2X}&format=webp&quality=60&withoutEnlargement=true ${PHOTO_WIDTH_2X}w`,
+    src: `${p.src}?width=${PHOTO_WIDTH}&format=webp&quality=40&withoutEnlargement=true`,
+    srcset: `${p.src}?width=${PHOTO_WIDTH}&format=webp&quality=40&withoutEnlargement=true ${PHOTO_WIDTH}w, ${p.src}?width=${PHOTO_WIDTH_2X}&format=webp&quality=40&withoutEnlargement=true ${PHOTO_WIDTH_2X}w`,
     sizes: '(min-width: 768px) 276px, calc(100vw - 42px)',
     originalSrc: p.src,
     id: String(i + 1),
@@ -31,8 +31,8 @@ const galleryEvents = events.map((event) => {
   return {
     title: event.title,
     displayDate: event.dateEn,
-    flyerSrc: `${event.flyer}?width=${FLYER_WIDTH}&format=webp&quality=60&withoutEnlargement=true`,
-    flyerSrcset: `${event.flyer}?width=${FLYER_WIDTH}&format=webp&quality=60&withoutEnlargement=true ${FLYER_WIDTH}w, ${event.flyer}?width=${FLYER_WIDTH_2X}&format=webp&quality=60&withoutEnlargement=true ${FLYER_WIDTH_2X}w`,
+    flyerSrc: `${event.flyer}?width=${FLYER_WIDTH}&format=webp&quality=40&withoutEnlargement=true`,
+    flyerSrcset: `${event.flyer}?width=${FLYER_WIDTH}&format=webp&quality=40&withoutEnlargement=true ${FLYER_WIDTH}w, ${event.flyer}?width=${FLYER_WIDTH_2X}&format=webp&quality=40&withoutEnlargement=true ${FLYER_WIDTH_2X}w`,
     flyerSizes: '(min-width: 768px) 331px, calc(100vw - 42px)',
     flyerOriginal: event.flyer,
     flyerWidth: FLYER_WIDTH,
