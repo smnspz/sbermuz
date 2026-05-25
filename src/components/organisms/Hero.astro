@@ -21,11 +21,18 @@ import { generateIcs } from '../../lib/calendar';
 
 const { title, description, image, imageWidth, imageHeight, date, dateEn, rawDate, address, price, eventSlug, locale = 'it' } = Astro.props;
 
-const HERO_WIDTH = 330;
-const HERO_WIDTH_2X = 660;
-const heroHeight = Math.round(imageHeight * HERO_WIDTH / imageWidth);
-const heroSrc = `${image}?width=${HERO_WIDTH}&format=webp&quality=60&withoutEnlargement=true`;
-const heroSrc2x = `${image}?width=${HERO_WIDTH_2X}&format=webp&quality=60&withoutEnlargement=true`;
+const HERO_SM = 263;
+const HERO_MD = 289;
+const HERO_SM_2X = 526;
+const HERO_MD_2X = 578;
+const heroHeight = Math.round(imageHeight * HERO_MD / imageWidth);
+const heroSrc = `${image}?width=${HERO_MD}&format=webp&quality=60&withoutEnlargement=true`;
+const heroSrcset = [
+  `${image}?width=${HERO_SM}&format=webp&quality=60&withoutEnlargement=true ${HERO_SM}w`,
+  `${image}?width=${HERO_MD}&format=webp&quality=60&withoutEnlargement=true ${HERO_MD}w`,
+  `${image}?width=${HERO_SM_2X}&format=webp&quality=60&withoutEnlargement=true ${HERO_SM_2X}w`,
+  `${image}?width=${HERO_MD_2X}&format=webp&quality=60&withoutEnlargement=true ${HERO_MD_2X}w`,
+].join(', ');
 
 const icsContent = generateIcs({ title, description, date: rawDate, address });
 const displayDate = locale === 'en' ? dateEn : date;
@@ -38,9 +45,10 @@ const eventHref = locale === 'en' ? `/en/event/${eventSlug}` : `/event/${eventSl
       <div class="flex justify-center hero-fade" style="--delay: 0ms">
         <img
           src={heroSrc}
-          srcset={`${heroSrc} 1x, ${heroSrc2x} 2x`}
+          srcset={heroSrcset}
+          sizes="(min-width: 768px) 289px, 263px"
           alt=""
-          width={HERO_WIDTH}
+          width={HERO_MD}
           height={heroHeight}
           fetchpriority="high"
           class="w-full max-w-75 md:max-w-82.5 block rounded-lg"
