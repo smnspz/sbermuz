@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'preact/hooks';
 
 interface PhotoItem {
   src: string;
+  srcset?: string;
   originalSrc: string;
   id: string;
   width: number;
@@ -12,6 +13,7 @@ interface Props {
   title: string;
   displayDate: string;
   flyerSrc: string;
+  flyerSrcset?: string;
   flyerOriginal: string;
   flyerWidth: number;
   flyerHeight: number;
@@ -70,6 +72,7 @@ function LazyPhoto({ photo, date }: { photo: PhotoItem; date: string }) {
       {visible ? (
         <img
           src={photo.src}
+          srcset={photo.srcset}
           alt=""
           width={photo.width}
           height={photo.height}
@@ -105,6 +108,7 @@ export default function EventGallery({
   title,
   displayDate,
   flyerSrc,
+  flyerSrcset,
   flyerOriginal,
   flyerWidth,
   flyerHeight,
@@ -122,6 +126,7 @@ export default function EventGallery({
         <div class="flex justify-center">
           <img
             src={flyerSrc}
+            srcset={flyerSrcset}
             alt=""
             width={flyerWidth}
             height={flyerHeight}

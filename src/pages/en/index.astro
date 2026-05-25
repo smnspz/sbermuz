@@ -11,13 +11,16 @@ const locale = 'en' as const;
 const [hero, events] = await Promise.all([getHero(), getEvents()]);
 const years = [...new Set(events.map((e) => e.rawDate.slice(0, 4)))].sort().reverse();
 
-const PHOTO_WIDTH = 400;
-const FLYER_WIDTH = 500;
+const PHOTO_WIDTH = 300;
+const PHOTO_WIDTH_2X = 600;
+const FLYER_WIDTH = 380;
+const FLYER_WIDTH_2X = 760;
 
 const galleryEvents = events.map((event) => {
   const flyerSizedHeight = Math.round(event.flyerHeight * FLYER_WIDTH / event.flyerWidth);
   const photos = (event.photos ?? []).map((p, i) => ({
     src: `${p.src}?width=${PHOTO_WIDTH}&format=webp&quality=60&withoutEnlargement=true`,
+    srcset: `${p.src}?width=${PHOTO_WIDTH}&format=webp&quality=60&withoutEnlargement=true 1x, ${p.src}?width=${PHOTO_WIDTH_2X}&format=webp&quality=60&withoutEnlargement=true 2x`,
     originalSrc: p.src,
     id: String(i + 1),
     width: PHOTO_WIDTH,
@@ -28,6 +31,7 @@ const galleryEvents = events.map((event) => {
     title: event.title,
     displayDate: event.dateEn,
     flyerSrc: `${event.flyer}?width=${FLYER_WIDTH}&format=webp&quality=60&withoutEnlargement=true`,
+    flyerSrcset: `${event.flyer}?width=${FLYER_WIDTH}&format=webp&quality=60&withoutEnlargement=true 1x, ${event.flyer}?width=${FLYER_WIDTH_2X}&format=webp&quality=60&withoutEnlargement=true 2x`,
     flyerOriginal: event.flyer,
     flyerWidth: FLYER_WIDTH,
     flyerHeight: flyerSizedHeight,

@@ -21,9 +21,11 @@ import { generateIcs } from '../../lib/calendar';
 
 const { title, description, image, imageWidth, imageHeight, date, dateEn, rawDate, address, price, eventSlug, locale = 'it' } = Astro.props;
 
-const HERO_WIDTH = 700;
+const HERO_WIDTH = 330;
+const HERO_WIDTH_2X = 660;
 const heroHeight = Math.round(imageHeight * HERO_WIDTH / imageWidth);
 const heroSrc = `${image}?width=${HERO_WIDTH}&format=webp&quality=60&withoutEnlargement=true`;
+const heroSrc2x = `${image}?width=${HERO_WIDTH_2X}&format=webp&quality=60&withoutEnlargement=true`;
 
 const icsContent = generateIcs({ title, description, date: rawDate, address });
 const displayDate = locale === 'en' ? dateEn : date;
@@ -34,7 +36,15 @@ const eventHref = locale === 'en' ? `/en/event/${eventSlug}` : `/event/${eventSl
   <div class="flex-1 flex items-center">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center w-full">
       <div class="flex justify-center hero-fade" style="--delay: 0ms">
-        <img src={heroSrc} alt="" width={HERO_WIDTH} height={heroHeight} fetchpriority="high" class="w-full max-w-75 md:max-w-82.5 block rounded-lg" />
+        <img
+          src={heroSrc}
+          srcset={`${heroSrc} 1x, ${heroSrc2x} 2x`}
+          alt=""
+          width={HERO_WIDTH}
+          height={heroHeight}
+          fetchpriority="high"
+          class="w-full max-w-75 md:max-w-82.5 block rounded-lg"
+        />
       </div>
       <div class="flex flex-col gap-4">
         <!-- Badge -->
