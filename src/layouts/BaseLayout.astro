@@ -30,6 +30,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://sbermuz.
 		<meta name="twitter:title" content={title} />
 		{description && <meta name="twitter:description" content={description} />}
 		{image && <meta name="twitter:image" content={image} />}
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&family=Unbounded:wght@400;700&display=swap" />
