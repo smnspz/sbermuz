@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { Header, Hero, InfoBar, Footer, Lightbox } from '../components';
+import { BackToTop, Header, Hero, InfoBar, Footer, Lightbox } from '../components';
 import EventGallery from '../components/islands/EventGallery';
 import { getEvents } from '../lib/events';
 import { getHero } from '../lib/hero';
@@ -64,6 +64,7 @@ const galleryEvents = events.map((event) => {
 		))}
 	</main>
 	<Footer locale={locale} />
+	<BackToTop />
 	<Lightbox />
 	<script>
 		document.querySelectorAll('.gallery-filter').forEach((btn) => {
