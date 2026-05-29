@@ -38,7 +38,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://sbermuz.
 		<noscript><link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&family=Unbounded:wght@400;700&display=swap" rel="stylesheet" /></noscript>
 		<title>{title}</title>
 	</head>
-	<body class={bodyClass}>
+	<body class={`${bodyClass} dark:bg-[#1a1a1a] dark:text-white`}>
 		<slot />
 	</body>
 </html>

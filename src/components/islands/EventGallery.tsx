@@ -90,7 +90,7 @@ function LazyPhoto({ photo, date }: { photo: PhotoItem; date: string }) {
       ) : (
         <div
           style={{ width: '100%', paddingBottom: `${(photo.height / photo.width) * 100}%` }}
-          class="rounded-lg bg-gray-200"
+          class="rounded-lg bg-gray-200 dark:bg-zinc-800"
         />
       )}
     </div>

@@ -4,6 +4,8 @@
   --font-sans: "Source Code Pro", monospace;
   --font-display: "Unbounded", sans-serif;
   --color-bg: #e8e6e1;
+  --color-bg-dark: #1a1a1a;
+  --color-surface: #2a2a2a;
 }
 
 html {

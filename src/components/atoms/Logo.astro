@@ -6,4 +6,4 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
-<img src="/sbermuz-logo.svg" alt="Sbermuz logo" width="109" height="20" class={className} />
+<img src="/sbermuz-logo.svg" alt="Sbermuz logo" width="109" height="20" class:list={[className, "dark:invert"]} />

@@ -48,7 +48,7 @@ export default function TableOfContentsRail({ title, entries, ariaLabel }: Props
     const isActive = activeId === id;
     return [
       'block py-1 border-l-[1.5px] transition-opacity',
-      isActive ? 'border-black opacity-100' : 'border-transparent opacity-60 hover:opacity-100',
+      isActive ? 'border-black dark:border-white opacity-100' : 'border-transparent opacity-60 hover:opacity-100',
     ].join(' ');
   };
 
