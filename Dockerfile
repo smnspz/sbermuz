@@ -17,7 +17,7 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # Build the site
-ARG DIRECTUS_URL=https://directus.sbermuz.club
+ARG DIRECTUS_URL=http://127.0.0.1:8055
 ENV DIRECTUS_URL=$DIRECTUS_URL
 RUN pnpm run build
 
