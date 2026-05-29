@@ -36,6 +36,8 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? 'https://sbermuz.
 		<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&family=Unbounded:wght@400;700&display=swap" />
 		<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&family=Unbounded:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
 		<noscript><link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&family=Unbounded:wght@400;700&display=swap" rel="stylesheet" /></noscript>
+		<meta property="og:site_name" content="Collettivo Sbermuz" />
+		<script type="application/ld+json" set:html={JSON.stringify({ "@context": "https://schema.org", "@type": "WebSite", "name": "Collettivo Sbermuz", "url": "https://sbermuz.club" })} />
 		<title>{title}</title>
 	</head>
 	<body class={`${bodyClass} dark:bg-[#1a1a1a] dark:text-white`}>
