@@ -1,43 +1,61 @@
-# Astro Starter Kit: Minimal
+# sbermuz.club
+> Website for Collettivo Sbermuz.
+
+Static bilingual (IT/EN) website built with Astro, Preact and Tailwind CSS. 
+
+Event listings, photo gallery and detail pages are driven by a Directus CMS backend.
+
+## Installation
 
 ```sh
-pnpm create astro@latest -- --template minimal
+pnpm install
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Requires Node >= 22.12.0. Copy `.env.example` to `.env` and set the Directus API URL.
 
-## 🚀 Project Structure
+## Usage example
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```sh
+pnpm dev      # local dev server on localhost:4321
+pnpm build    # production build to ./dist/
+pnpm preview  # preview the build locally
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Development setup
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```sh
+git clone <repo-url>
+cd sbermuz
+pnpm install
+cp .env.example .env   # fill in DIRECTUS_URL
+```
 
-Any static assets, like images, can be placed in the `public/` directory.
+Directus runs on a remote server. To access it locally, open an SSH tunnel:
 
-## 🧞 Commands
+```sh
+ssh -N -f -L 8055:localhost:8055 user@remote_server
+```
 
-All commands are run from the root of the project, from a terminal:
+Then start the dev server:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+```sh
+pnpm dev
+```
 
-## 👀 Want to learn more?
+To kill the background tunnel when done:
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+```sh
+pkill -f "ssh -N -f -L 8055"
+```
+
+## Release History
+
+- **0.0.1** - Initial release.
+
+## Contributing
+
+Not open for contributions at this time.
+
+## License
+
+All rights reserved.
