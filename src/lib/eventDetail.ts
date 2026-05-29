@@ -1,6 +1,6 @@
 import { marked } from 'marked';
 
-import { DIRECTUS_URL } from './constants';
+import { DIRECTUS_URL, DIRECTUS_ASSETS_URL } from './constants';
 import type { Locale } from './i18n';
 
 /** A resolved genre. */
@@ -93,7 +93,7 @@ export async function getEventBySlug(slug: string, locale: Locale = 'it'): Promi
     return {
       name: a.name,
       description: artistTr?.description ?? a.description ?? '',
-      photo: a.photo ? `${DIRECTUS_URL}/assets/${a.photo}` : '',
+      photo: a.photo ? `${DIRECTUS_ASSETS_URL}/assets/${a.photo}` : '',
       genres,
       spotifyUrl: a.spotify_url ?? undefined,
       bandcampUrl: a.bandcamp_url ?? undefined,
@@ -120,7 +120,7 @@ export async function getEventBySlug(slug: string, locale: Locale = 'it'): Promi
     dateEn: dateFmt('en-GB'),
     rawDate: item.date,
     description: rawDescription ? await marked.parse(rawDescription) : '',
-    flyer: `${DIRECTUS_URL}/assets/${item.flyer}`,
+    flyer: `${DIRECTUS_ASSETS_URL}/assets/${item.flyer}`,
     coordinates,
     address: item.address_id?.full_address ?? undefined,
     priceFull,

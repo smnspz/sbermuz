@@ -1,6 +1,7 @@
 import type { Locale } from './i18n';
 
 export const DIRECTUS_URL = import.meta.env.DIRECTUS_URL;
+export const DIRECTUS_ASSETS_URL = import.meta.env.PUBLIC_DIRECTUS_URL || DIRECTUS_URL;
 
 export const DAYS: Record<Locale, string[]> = {
   it: ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'],

@@ -1,4 +1,4 @@
-import { DIRECTUS_URL } from './constants';
+import { DIRECTUS_URL, DIRECTUS_ASSETS_URL } from './constants';
 
 /** A normalized artist. */
 export interface Artist {
@@ -72,7 +72,7 @@ export async function getEvents(): Promise<Event[]> {
 
   return items.filter((item) => item.show_in_gallery).map((item) => {
       const photos = item.photos?.map((p) => ({
-        src: `${DIRECTUS_URL}/assets/${p.directus_files_id.id}`,
+        src: `${DIRECTUS_ASSETS_URL}/assets/${p.directus_files_id.id}`,
         width: p.directus_files_id.width,
         height: p.directus_files_id.height,
       }));
@@ -82,7 +82,7 @@ export async function getEvents(): Promise<Event[]> {
         date: item.date.slice(8, 10) + '/' + item.date.slice(5, 7) + '/' + item.date.slice(0, 4),
         dateEn: item.date.slice(5, 7) + '/' + item.date.slice(8, 10) + '/' + item.date.slice(0, 4),
         rawDate: item.date,
-        flyer: `${DIRECTUS_URL}/assets/${item.flyer.id}`,
+        flyer: `${DIRECTUS_ASSETS_URL}/assets/${item.flyer.id}`,
         flyerWidth: item.flyer.width,
         flyerHeight: item.flyer.height,
         photos: photos && photos.length > 0 ? photos : undefined,

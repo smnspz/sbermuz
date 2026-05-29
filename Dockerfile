@@ -1,30 +1,28 @@
-# Stage 1: Build the Astro site
-FROM node:22-alpine AS builder
+# Stage 1: Install dependencies
+FROM node:22-alpine AS deps
 
-# Install pnpm
 RUN corepack enable && corepack prepare pnpm@9.0.1 --activate
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files
 COPY package.json pnpm-lock.yaml ./
-
-# Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Copy source code
 COPY . .
 
-# Build the site
-ARG DIRECTUS_URL=https://directus.sbermuz.club
-ENV DIRECTUS_URL=$DIRECTUS_URL
-RUN pnpm run build
+# Stage 2: Build at runtime (needs Docker network to reach Directus), then serve
+FROM node:22-alpine
 
-# Stage 2: Serve static files
-FROM caddy:2-alpine
+RUN corepack enable && corepack prepare pnpm@9.0.1 --activate
+RUN apk add --no-cache caddy
 
-COPY --from=builder /app/dist /srv
+WORKDIR /app
+COPY --from=deps /app /app
 COPY Caddyfile /etc/caddy/Caddyfile
+
+ENV DIRECTUS_URL=http://directus:8055
+ENV PUBLIC_DIRECTUS_URL=https://directus.sbermuz.club
+
+CMD ["sh", "-c", "pnpm run build && caddy run --config /etc/caddy/Caddyfile --adapter caddyfile"]
 
 EXPOSE 69

@@ -1,4 +1,4 @@
-import { DIRECTUS_URL } from './constants';
+import { DIRECTUS_URL, DIRECTUS_ASSETS_URL } from './constants';
 import { formatDate } from './datetime';
 import { slugify } from './eventDetail';
 
@@ -50,7 +50,7 @@ export async function getHero(): Promise<Hero> {
   return {
     title: event.name,
     description: event.description ?? '',
-    image: `${DIRECTUS_URL}/assets/${event.flyer.id}`,
+    image: `${DIRECTUS_ASSETS_URL}/assets/${event.flyer.id}`,
     imageWidth: event.flyer.width,
     imageHeight: event.flyer.height,
     date: formatDate(event.date, 'it'),

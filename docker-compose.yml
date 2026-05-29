@@ -7,7 +7,10 @@ services:
     restart: unless-stopped
     networks:
       - caddy-network
+      - directus-network
 
 networks:
   caddy-network:
+    external: true
+  directus-network:
     external: true
