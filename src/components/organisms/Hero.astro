@@ -42,16 +42,17 @@ const eventHref = locale === 'en' ? `/en/event/${eventSlug}` : `/event/${eventSl
 <section class="flex flex-col px-6 pb-16 md:pb-24 md:pt-16 max-w-6xl mx-auto">
   <div class="flex-1 flex items-center">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center w-full">
-      <div class="flex justify-center hero-fade" style="--delay: 0ms">
+      <div class="-mx-6 md:mx-0 flex justify-center hero-fade overflow-hidden max-h-120 md:max-h-none" style="--delay: 0ms">
         <img
+          id="hero-img"
           src={heroSrc}
           srcset={heroSrcset}
-          sizes="(min-width: 768px) 289px, 263px"
+          sizes="(min-width: 768px) 289px, 100vw"
           alt=""
           width={HERO_MD}
           height={heroHeight}
           fetchpriority="high"
-          class="w-full max-w-75 md:max-w-82.5 block rounded-lg"
+          class="w-full md:max-w-82.5 block md:rounded-lg object-cover"
         />
       </div>
       <div class="flex flex-col gap-4">
@@ -113,6 +114,20 @@ const eventHref = locale === 'en' ? `/en/event/${eventSlug}` : `/event/${eventSl
 
 
 <script>
+  const heroImg = document.getElementById('hero-img') as HTMLImageElement | null;
+  if (heroImg && window.innerWidth < 768) {
+    const container = heroImg.parentElement!;
+    function updateParallax() {
+      const rect = container.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const progress = 1 - (rect.bottom / (vh + rect.height));
+      const pct = Math.min(100, Math.max(0, progress * 100));
+      heroImg!.style.objectPosition = `center ${pct}%`;
+    }
+    window.addEventListener('scroll', updateParallax, { passive: true });
+    updateParallax();
+  }
+
   const calBtn = document.getElementById('add-to-calendar');
   calBtn?.addEventListener('click', () => {
     const ics = calBtn.dataset.ics;
